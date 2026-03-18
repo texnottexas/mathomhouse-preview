@@ -27,26 +27,31 @@
 
 <body>
   <header id="header-placeholder"></header>
-  <section class="hero-blurb">
-    <div class="blurb-container">
-      <h1>Welcome to Mathom House v2.0</h1>
-      <p>
-        A collection of tools and calculators for Top War players, created by <strong>Gikey (s2698/3355)</strong> and <strong>artu (s2698)</strong> with help from friends around the community. <br><br>
-        If you have any suggestions for current or future tools or the site in general, please let us know <a href="#feedback">here</a>!
+
+  <section class="hero">
+    <div class="hero-inner">
+      <img src="/mathomhouse-preview/cutelogo.jpg" alt="Mathom House" class="hero-logo" width="80" height="80">
+      <h1>Mathom House <span class="version-badge">v2.0</span></h1>
+      <p class="hero-tagline">
+        Tools &amp; calculators for Top War players, created by
+        <strong>Gikey (s2698/3355)</strong> and <strong>artu (s2698)</strong>
+        with help from friends around the community.
+      </p>
+      <p class="hero-cta">
+        Have suggestions? <a href="#feedback">Let us know</a>!
       </p>
     </div>
   </section>
 
-  <section id="home" class="section">
-    <div class="main-links">
-      <a href="#calculators">Calculators</a>
-      <a href="#stores">Stores</a>
-      <a href="#eternalland">Eternal Land</a>
-      <a href="#enigmadominators">Enigma Dominators</a>
-      <a href="#feedback">Feedback<br>+<br>Support</a>
-      <a href="/mathomhouse-preview/guides.html">Guides <br>(Under Construction)</a>
-    </div>
-  </section>
+  <nav class="quick-nav" id="home">
+    <a href="#calculators">Calculators</a>
+    <a href="#stores">Stores</a>
+    <a href="#eternalland">Eternal Land</a>
+    <a href="#enigmadominators">Enigma Dominators</a>
+    <a href="#feedback">Feedback + Support</a>
+    <a href="/mathomhouse-preview/guides.html">Guides</a>
+  </nav>
+
   <section id="calculators" class="section">
     <h2 class="section-title">Calculators</h2>
     <div class="cards-grid">
@@ -142,7 +147,8 @@
       </a>
     </div>
   </section>
-  <section id="stores" class="section">
+
+  <section id="stores" class="section section-alt">
     <h2 class="section-title">Stores</h2>
     <div class="cards-grid">
       <a href="/mathomhouse-preview/ssc-store.html" class="card-link">
@@ -151,7 +157,7 @@
             <img src="/mathomhouse-preview/images/sscstore-icon.png" alt="Seal Stone Chaos Store Icon">
           </div>
           <h3>Seal Stone Chaos Store</h3>
-          <p>Figure out what you want to buy from the Seal Stone chaos Store</p>
+          <p>Figure out what you want to buy from the Seal Stone Chaos Store</p>
         </div>
       </a>
       <a href="/mathomhouse-preview/mastersstore.html" class="card-link">
@@ -192,6 +198,7 @@
       </a>
     </div>
   </section>
+
   <section id="eternalland" class="section">
     <h2 class="section-title">Eternal Land</h2>
     <div class="cards-grid">
@@ -224,7 +231,8 @@
       </a>
     </div>
   </section>
-  <section id="enigmadominators" class="section">
+
+  <section id="enigmadominators" class="section section-alt">
     <h2 class="section-title">Enigma Dominators</h2>
     <div class="cards-grid">
       <a href="archive/edstore.html" class="card-link">
@@ -247,6 +255,7 @@
       </a>
     </div>
   </section>
+
   <section id="feedback" class="section">
     <h2 class="section-title">Feedback / Support</h2>
     <div class="cards-grid">
@@ -265,13 +274,13 @@
             <img src="/mathomhouse-preview/images/coffee-icon.png" alt="Coffee Icon" />
           </div>
           <h3>Support / Buy Me a Coffee</h3>
-          <p>If this site has helped you, consider supporting it's creators!</p>
+          <p>If this site has helped you, consider supporting its creators!</p>
         </div>
       </a>
     </div>
   </section>
 
-  <button id="backToTop">↑</button>
+  <button id="backToTop" aria-label="Back to top">↑</button>
 
   <div id="feedback-modal" class="modal hidden">
     <div class="modal-content">
@@ -296,34 +305,37 @@
 
       <div class="modal-buttons">
         <button id="feedback-submit-btn">Submit</button>
-        <button id="feedback-cancel-btn">Cancel</button>
+        <button id="feedback-cancel-btn" class="btn-secondary">Cancel</button>
       </div>
 
-      <div id="feedback-confirmation" class="confirmation-message hidden">✅ Feedback sent! Thank you!</div>
+      <div id="feedback-confirmation" class="confirmation-message hidden">Feedback sent! Thank you!</div>
     </div>
   </div>
   <div id="modal-backdrop" class="modal-backdrop hidden"></div>
-  <div id="toast" class="toast">✅ Feedback submitted!</div>
+  <div id="toast" class="toast">Feedback submitted!</div>
   <div id="support-modal" class="modal hidden">
     <div class="modal-content">
-      <h2>☕ Support This Site</h2>
-      <p>If you enjoy using these tools and wish to support its creators, please do so here via 'Buy Me a Coffee.' </p>
+      <h2>Support This Site</h2>
+      <p>If you enjoy using these tools and wish to support its creators, please do so here via 'Buy Me a Coffee.'</p>
       <a href="https://www.buymeacoffee.com/gikey" target="_blank" rel="noopener noreferrer" class="coffee-btn">Buy Me a Coffee</a>
       <div class="modal-buttons">
-        <button id="support-close-btn">Close</button>
+        <button id="support-close-btn" class="btn-secondary">Close</button>
       </div>
     </div>
   </div>
   <div id="support-backdrop" class="modal-backdrop hidden"></div>
 
-<footer class="site-footer">
-  <p>Special thanks to:<br>
-    <strong>Tex (s2864)</strong> for data used to make the <a href="/mathomhouse-preview/pets.html">Pets Calculator</a> and <a href="/mathomhouse-preview/guides/chaoscrafting.html">Chaos Crafting Guide</a>!<br>
-    <strong>Bobgrif</strong> for the data used to make various guides<br>
-    <strong>tzup</strong> for the data used to populate the <a href="https://mathomhouse.github.io/archive/EnigmaDominators.html">Enigma Dominator 2025 Map</a>! <br>
-    <strong>Mischief (s3355)</strong> for the inspiration to develop Mathom House in the first place. Please visit her site <a href="https://alexilys.github.io/index.html">here</a>!
-  </p>
-</footer>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-credits">
+        Special thanks to
+        <strong>Tex (s2864)</strong> for data used in the <a href="/mathomhouse-preview/pets.html">Pets Calculator</a> and <a href="/mathomhouse-preview/guides/chaoscrafting.html">Chaos Crafting Guide</a>,
+        <strong>Bobgrif</strong> for data used in various guides,
+        <strong>tzup</strong> for data populating the <a href="https://mathomhouse.github.io/archive/EnigmaDominators.html">ED 2025 Map</a>,
+        and <strong>Mischief (s3355)</strong> for the inspiration to build Mathom House &mdash; visit her site <a href="https://alexilys.github.io/index.html">here</a>!
+      </p>
+    </div>
+  </footer>
 
 </body>
 </html>

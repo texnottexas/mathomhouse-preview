@@ -109,28 +109,8 @@ document.addEventListener('DOMContentLoaded', function () {
         body: formData
       });
   
-      const discordWebhookUrl = 'https://discord.com/api/webhooks/1372702749145436160/T2Up9M6X6ZkgAU10Yw5zFTR6XBDiSs7cU33So9McJZp7SP504koGAIbQ7APYS9jx9TEN';
-      const discordPayload = {
-        embeds: [{
-          title: "📬 New Feedback Submitted",
-          color: 3447003,
-          fields: [
-            { name: "🗂️ Type", value: type, inline: true },
-            { name: "👤 Discord", value: discord || "N/A", inline: true },
-            { name: "📝 Message", value: feedback },
-            { name: "📍 Page", value: pageURL },
-            { name: "🌐 Language", value: userLang, inline: true },
-            { name: "🕒 Local Time (PST)", value: localTime, inline: true }
-          ],
-          timestamp: new Date().toISOString()
-        }]
-      };
-  
-      fetch(discordWebhookUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(discordPayload)
-      });
+      // NOTE: Discord webhook removed from client-side code for security.
+      // See docs/security-review.md for details on implementing a server-side proxy.
   
       document.getElementById('modal-feedback-input').value = '';
       document.getElementById('discord-name').value = '';

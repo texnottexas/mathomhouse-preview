@@ -13,16 +13,6 @@ gaScript2.innerHTML = `
 `;
 document.head.appendChild(gaScript2);
 
-// Function to dynamically add the favicon
-function addFavicon() {
-    const link = document.createElement('link');
-    link.rel = 'icon';
-    link.href = '/cutelogo.ico'; // Make sure the path is correct
-    link.type = 'image/x-icon';
-    
-    document.head.appendChild(link);
-}
-
 function loadHeader(){
   fetch('/header.html')
   .then(res => res.text())
@@ -65,13 +55,9 @@ function initializeHeader(){
       }
     });
 
-    // Mobile menu toggle
-    const menuToggle = document.querySelector('.menu-toggle');
-    const nav = document.getElementById('nav');
-    if (menuToggle && nav) {
-      menuToggle.addEventListener('click', () => {
-        nav.classList.toggle('active');
-      });
+    // Mobile menu toggle — wired up via JS (no inline onclick)
+    if (hamburger) {
+      hamburger.addEventListener('click', toggleDropdown);
     }
 
     // === Submenu support ===

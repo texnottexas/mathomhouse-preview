@@ -32,12 +32,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // HT icon cycling with clean transition handling
     var htIcons = [
-      "/images/yellow-ht-icon.png",
-      "/images/red-ht-icon.png",
-      "/images/blue-ht-icon.png",
-      "/images/ball-ht-icon.png",
-      "/images/white-ht-icon.png",
-      "/images/pink-ht-icon.png"
+      "/mathomhouse-preview/images/yellow-ht-icon.png",
+      "/mathomhouse-preview/images/red-ht-icon.png",
+      "/mathomhouse-preview/images/blue-ht-icon.png",
+      "/mathomhouse-preview/images/ball-ht-icon.png",
+      "/mathomhouse-preview/images/white-ht-icon.png",
+      "/mathomhouse-preview/images/pink-ht-icon.png"
     ];
 
     var iconElement = document.getElementById("ht-icon");

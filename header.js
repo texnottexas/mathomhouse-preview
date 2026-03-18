@@ -14,7 +14,7 @@ gaScript2.innerHTML = `
 document.head.appendChild(gaScript2);
 
 function loadHeader(){
-  fetch('header.html')
+  fetch('/mathomhouse-preview/header.html')
   .then(res => res.text())
   .then(html => {
     // Inject header HTML

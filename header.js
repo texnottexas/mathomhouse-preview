@@ -34,8 +34,13 @@ function loadHeader() {
 }
 
 function updateThemeIcons(isLight) {
-  document.querySelectorAll('#icon-moon').forEach(el => el.style.display = isLight ? 'none' : 'block');
-  document.querySelectorAll('#icon-sun').forEach(el => el.style.display = isLight ? 'block' : 'none');
+  document.querySelectorAll('.icon-moon').forEach(el => el.style.display = isLight ? 'none' : 'block');
+  document.querySelectorAll('.icon-sun').forEach(el => el.style.display = isLight ? 'block' : 'none');
+  // topbar SVG icons (IDs used on index.html topbar buttons)
+  const moonId = document.getElementById('icon-moon');
+  const sunId = document.getElementById('icon-sun');
+  if (moonId) moonId.style.display = isLight ? 'none' : 'block';
+  if (sunId) sunId.style.display = isLight ? 'block' : 'none';
   const lbl = document.querySelector('.sidebar-theme-label');
   if (lbl) lbl.textContent = isLight ? 'Light mode' : 'Dark mode';
 }
@@ -57,8 +62,12 @@ function initializeSidebar() {
   const isLight = savedTheme === 'light';
   applyTheme(isLight);
 
-  // Wire up all theme toggle buttons (sidebar + topbar)
-  document.querySelectorAll('#themeToggle').forEach(btn => {
+  // Wire up all theme toggle buttons (sidebar data-theme-toggle + topbar #themeToggle)
+  const themeButtons = [
+    ...document.querySelectorAll('[data-theme-toggle]'),
+    ...document.querySelectorAll('#themeToggle'),
+  ];
+  themeButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const currentlyLight = document.body.dataset.theme === 'light';
       const nextLight = !currentlyLight;

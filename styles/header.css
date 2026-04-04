@@ -1,7 +1,7 @@
 /* ============================================================ */
 /* Header / Navigation styles                                   */
-/* CSS variables are defined in styles/index.css (single source */
-/* of truth). Dark mode is the default; light = [data-theme="light"] */
+/* CSS variables defined in styles/index.css (single source)   */
+/* Dark mode is default; light = [data-theme="light"]          */
 /* ============================================================ */
 
 :root {
@@ -21,33 +21,39 @@ body {
 /* Header layout */
 header {
   background-color: var(--header-bg);
-  padding: 15px 30px;
+  padding: 12px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
   position: sticky;
   top: 0;
   z-index: 1000;
+  gap: 16px;
 }
 
+/* Logo */
 .logo a {
   color: white;
   text-decoration: none;
-  font-size: 28px;
-  font-weight: bold;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  transition: color 0.2s;
 }
 
 .logo a:hover {
   color: var(--accent-color);
 }
 
+/* Right side of header */
 .header-right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
 }
 
+/* Navigation dropdown */
 nav {
   display: none;
   flex-direction: column;
@@ -56,43 +62,59 @@ nav {
   top: 100%;
   left: 0;
   width: fit-content;
-  min-width: 150px;
+  min-width: 180px;
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  overflow: hidden;
 }
 
 [data-theme="light"] nav {
   background-color: #444;
 }
 
+/* Nav links */
 nav a {
-  margin: 0 15px;
-  padding: 5px;
+  margin: 0;
+  padding: 10px 16px;
   text-decoration: none;
   color: #e6edf3;
-  font-weight: bold;
-  transition: color 0.3s;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s;
   white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  display: block;
 }
 
-nav a.active, nav a:hover {
+nav a:hover {
   color: var(--accent-color);
+  background: rgba(121, 192, 255, 0.06);
 }
 
+nav a.active {
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
+}
+
+/* Hamburger / menu toggle */
 .menu-toggle {
   flex-direction: column;
   cursor: pointer;
+  gap: 5px;
+  padding: 4px;
 }
 
 .bar {
   height: 3px;
-  width: 25px;
+  width: 24px;
   background-color: white;
-  margin: 4px 0;
   border-radius: 3px;
+  transition: all 0.3s ease;
+  display: block;
 }
 
+/* Theme toggle button */
 .theme-toggle {
   cursor: pointer;
   font-size: 18px;
@@ -106,61 +128,67 @@ nav a.active, nav a:hover {
   line-height: 1;
   display: flex;
   align-items: center;
+  opacity: 0.8;
 }
 
 .theme-toggle:hover {
   transform: rotate(20deg);
   background: none;
+  opacity: 1;
+  box-shadow: none;
 }
 
 /* Submenu styling */
 .submenu-container {
   position: relative;
-  height: auto;
-  margin: 4px 0;
-  padding: 5px;
-  border-bottom: 1px solid var(--border-color);
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.submenu-container:last-child {
+  border-bottom: none;
 }
 
 .submenu {
   display: none;
   flex-direction: column;
-  background-color: #0d1117;
-  position: relative;
-  left: 10px;
-  margin-top: 5px;
+  background-color: rgba(0,0,0,0.2);
   border-left: 2px solid var(--accent-color);
-  border-radius: 4px;
-}
-
-[data-theme="light"] .submenu {
-  background-color: #555;
+  margin: 0;
 }
 
 .submenu a {
-  padding-left: 20px;
-  border: none;
+  padding-left: 24px;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.submenu a:hover {
+  opacity: 1;
 }
 
 .submenu-container.open .submenu {
   display: flex;
 }
 
-/* Card links in nav context */
+/* Card links */
 .card-link {
   text-decoration: none;
   color: inherit;
   display: block;
 }
+
 .card-icon {
   margin-bottom: 0.5rem;
 }
+
 .card-icon img {
-  width: 64px;
-  height: 64px;
+  width: 60px;
+  height: 60px;
 }
 
-/* Mobile */
+/* Mobile styles */
 @media (max-width: 768px) {
   .header-right {
     flex-direction: column;
@@ -172,16 +200,17 @@ nav a.active, nav a:hover {
     flex-direction: column;
     background: var(--header-bg);
     position: absolute;
-    top: 60px;
-    right: 20px;
+    top: 56px;
+    right: 16px;
     width: fit-content;
-    border-radius: 8px;
+    min-width: 200px;
+    border-radius: 10px;
     border: 1px solid var(--border-color);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
   }
 
   nav a {
-    padding: 5px;
-    margin: 5px 0;
+    padding: 10px 16px;
   }
 
   .menu-toggle {
@@ -193,7 +222,11 @@ nav a.active, nav a:hover {
   }
 
   .theme-toggle {
-    margin-top: 10px;
+    margin-top: 8px;
+  }
+
+  header {
+    padding: 10px 16px;
   }
 }
 

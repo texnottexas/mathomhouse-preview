@@ -7,6 +7,22 @@
     }
   })();
 </script>
+<style>
+  /* Critical sidebar styles inline — always fresh, bypasses CDN cache on header.css */
+  #header-placeholder {
+    background: #080c15 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-right: 1px solid rgba(0,212,170,0.08);
+  }
+  .mobile-topbar { display: none; }
+  @media (max-width: 900px) {
+    .mobile-topbar { display: flex !important; }
+  }
+</style>
 
 <!-- Mobile topbar — fixed to top of viewport, hidden on desktop -->
 <div class="mobile-topbar" id="mobileTopbar">

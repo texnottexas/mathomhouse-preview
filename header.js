@@ -20,7 +20,7 @@ function headerRoot() {
 }
 
 function loadHeader() {
-  fetch(headerRoot() + 'header.html')
+  fetch(headerRoot() + 'header.html', { cache: 'no-store' })
     .then(res => res.text())
     .then(html => {
       const placeholder = document.getElementById('header-placeholder');
@@ -28,6 +28,30 @@ function loadHeader() {
       const range = document.createRange();
       range.selectNode(document.body);
       placeholder.appendChild(range.createContextualFragment(html));
+
+      // Apply sidebar layout directly via JS to bypass CDN-cached CSS
+      const sw = '240px';
+      placeholder.style.cssText = [
+        'position:fixed', 'top:0', 'left:0', 'z-index:300',
+        'width:' + sw, 'height:100vh',
+        'background:#080c15',
+        'border-right:1px solid rgba(0,212,170,0.08)',
+        'display:flex', 'flex-direction:column',
+        'overflow-y:auto', 'overflow-x:hidden'
+      ].join(';');
+
+      // Body padding so content clears the sidebar
+      // Only apply if not already set (CSS may handle it once cache expires)
+      if (window.innerWidth > 900) {
+        if (!document.body.style.paddingLeft) {
+          document.body.style.paddingLeft = sw;
+        }
+        // Undo flex on body — breaks calc page vertical stacking
+        if (getComputedStyle(document.body).display === 'flex') {
+          document.body.style.display = 'block';
+        }
+      }
+
       initializeSidebar();
     })
     .catch(err => console.error('Header load error:', err));

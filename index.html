@@ -7,319 +7,351 @@
   <title>Mathom House</title>
 
   <meta name="description" content="Tools and calculators for Top War players.">
-
   <meta property="og:title" content="Mathom House">
   <meta property="og:description" content="Tools and calculators for Top War players.">
   <meta property="og:image" content="https://mathomhouse.github.io/cutelogo.jpg">
   <meta property="og:url" content="https://mathomhouse.github.io/">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="From Artu and Gikey">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles/index.css">
   <link rel="stylesheet" href="styles/header.css">
   <script src="index.js"></script>
   <script src="header.js" defer></script>
-
   <link rel="icon" href="/cutelogo.ico" type="image/x-icon">
 </head>
 
 <body>
-  <header id="header-placeholder"></header>
-  <section class="hero-blurb">
-    <div class="blurb-container">
-      <h1>Mathom House</h1>
-      <p>
-        A collection of tools and calculators for Top War players, created by <strong>Gikey (s2698/3355)</strong> and <strong>artu (s2698)</strong> with help from the community.<br><br>
-        Have a suggestion or found a bug? <a href="#feedback">Let us know!</a>
-      </p>
-    </div>
-  </section>
+  <!-- Sidebar — filled by header.js fetching header.html -->
+  <aside id="header-placeholder" class="sidebar" aria-label="Site navigation"></aside>
 
-  <section id="home" class="section">
-    <div class="main-links">
-      <a href="#calculators">Calculators</a>
-      <a href="#stores">Stores</a>
-      <a href="#eternalland">Eternal Land</a>
-      <a href="#enigmadominators">Enigma Dominators</a>
-      <a href="#friends">Friends'<br>Tools</a>
-      <a href="#feedback">Feedback<br>+<br>Support</a>
-      <a href="/guides.html">Guides</a>
+  <!-- Overlay for mobile sidebar -->
+  <div id="sidebar-overlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <!-- Main content wrapper -->
+  <div class="main-wrapper">
+
+    <!-- Topbar (mobile burger + always-visible theme toggle) -->
+    <div class="topbar">
+      <button class="topbar-burger" id="sidebarToggle" onclick="openSidebar()" aria-label="Open navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="/" class="topbar-brand">MATHOM<span>HOUSE</span></a>
+      <div class="topbar-right">
+        <button class="theme-toggle" id="themeToggle" title="Toggle light/dark" aria-label="Toggle theme">
+          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
     </div>
-  </section>
-  <section id="calculators" class="section">
-    <h2 class="section-title">Calculators</h2>
-    <div class="cards-grid">
-      <a href="/exclusives.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/shard-icon.png" alt="Shard Icon">
-          </div>
-          <h3>ES Calculator</h3>
-          <p>Figure out how many ES shards you need for an ES 7!</p>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-aurora"></div>
+      <div class="hero-hex"></div>
+      <div class="hero-fade"></div>
+      <div class="hero-content">
+        <div class="hero-label">
+          <span class="hero-label-line"></span>
+          Top War &mdash; Community Tools
+          <span class="hero-label-line"></span>
         </div>
-      </a>
-      <a href="/gems.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/gems-icon.png" alt="Gems Icon">
-          </div>
-          <h3>Gem Calculator</h3>
-          <p>Add up how many gems you've been hoarding!</p>
+        <h1 class="hero-title">MATHOM<br><em>HOUSE</em></h1>
+        <p class="hero-sub">Calculators, store planners, and guides for Top War players.<br>Built by <strong>Gikey (s2698/3355)</strong> &amp; <strong>artu (s2698)</strong> with help from the community.</p>
+        <div class="hero-pills">
+          <a href="#calculators" class="pill pill-teal">Calculators</a>
+          <a href="#stores" class="pill pill-amber">Stores</a>
+          <a href="#eternalland" class="pill pill-sky">Eternal Land</a>
+          <a href="#guides.html" class="pill pill-violet">Guides</a>
+          <a href="#feedback" class="pill">Feedback</a>
         </div>
-      </a>
-      <a href="/equipment.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/equipment-icon.png" alt="Equipment Icon">
-          </div>
-          <h3>Equipment Calculator</h3>
-          <p>Calculate how long until your equipment can be crafted</p>
+      </div>
+    </section>
+
+    <!-- Main sections -->
+    <main>
+
+      <!-- ── Calculators ── -->
+      <section id="calculators" class="section">
+        <div class="sec-header sec-teal">
+          <span class="sec-id">SEC-01</span>
+          <div class="sec-line"></div>
+          <h2 class="sec-name">Calculators</h2>
+          <div class="sec-line sec-line-r"></div>
         </div>
-      </a>
-      <a href="/components.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/components-icon.png" alt="Components Icon">
-          </div>
-          <h3>Components Calculator</h3>
-          <p>How close are you to ROF 10?</p>
+        <div class="cards-grid">
+          <a href="/exclusives.html" class="card card-teal">
+            <span class="card-corner"></span>
+            <div class="card-tag">SHARDS</div>
+            <div class="card-icon"><img src="/images/shard-icon.png" alt=""></div>
+            <h3>ES Calculator</h3>
+            <p>How many ES shards to reach ES 7?</p>
+          </a>
+          <a href="/gems.html" class="card card-teal">
+            <span class="card-corner"></span>
+            <div class="card-tag">GEMS</div>
+            <div class="card-icon"><img src="/images/gems-icon.png" alt=""></div>
+            <h3>Gem Calculator</h3>
+            <p>Total your hoarded gem inventory.</p>
+          </a>
+          <a href="/equipment.html" class="card card-teal">
+            <span class="card-corner"></span>
+            <div class="card-tag">CRAFT</div>
+            <div class="card-icon"><img src="/images/equipment-icon.png" alt=""></div>
+            <h3>Equipment Calculator</h3>
+            <p>Time until your equipment can be crafted.</p>
+          </a>
+          <a href="/components.html" class="card card-teal">
+            <span class="card-corner"></span>
+            <div class="card-tag">COMPONENTS</div>
+            <div class="card-icon"><img src="/images/components-icon.png" alt=""></div>
+            <h3>Components Calculator</h3>
+            <p>How close are you to ROF 10?</p>
+          </a>
+          <a href="/resources.html" class="card card-teal">
+            <span class="card-corner"></span>
+            <div class="card-tag">RSS</div>
+            <div class="card-icon"><img src="/images/resources-icon.png" alt=""></div>
+            <h3>Resources Calculator</h3>
+            <p>Food, Oil, and Odinium totals.</p>
+          </a>
+          <a href="/gear.html" class="card card-teal">
+            <span class="card-corner"></span>
+            <div class="card-tag">STATS</div>
+            <div class="card-icon"><img id="ht-icon" src="/images/yellow-ht-icon.png" alt=""></div>
+            <h3>Gear Calculator</h3>
+            <p>Compare stats between two gear loadouts.</p>
+          </a>
+          <a href="/vit.html" class="card card-teal">
+            <span class="card-corner"></span>
+            <div class="card-tag">VIT</div>
+            <div class="card-icon"><img src="/images/vit-icon.png" alt=""></div>
+            <h3>VIT Calculator</h3>
+            <p>How much VIT do you have saved up?</p>
+          </a>
+          <a href="/VIP.html" class="card card-teal">
+            <span class="card-corner"></span>
+            <div class="card-tag">SPENDING</div>
+            <div class="card-icon"><img src="/images/VIP-icon.png" alt=""></div>
+            <h3>VIP Calculator</h3>
+            <p>Do you <em>really</em> want to know how much you've spent?</p>
+          </a>
+          <a href="/pets.html" class="card card-teal">
+            <span class="card-corner"></span>
+            <div class="card-tag">PETS</div>
+            <div class="card-icon"><img src="/images/pets-icon.png" alt=""></div>
+            <h3>Pets Calculator</h3>
+            <p>Max stats for gold or purple pets. With Tex (s2864).</p>
+          </a>
+          <a href="/techdonations.html" class="card card-teal">
+            <span class="card-corner"></span>
+            <div class="card-tag">TECH</div>
+            <div class="card-icon"><img src="/images/expansion-icon.png" alt=""></div>
+            <h3>Tech Donation Calculator</h3>
+            <p>Time to complete Territorial Expansion or A New Era of Glory.</p>
+          </a>
         </div>
-      </a>
-      <a href="/resources.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/resources-icon.png" alt="Resources Icon">
-          </div>
-          <h3>Resources Calculator</h3>
-          <p>How much Food, Oil, and Odinium do you have saved?</p>
+      </section>
+
+      <!-- ── Stores ── -->
+      <section id="stores" class="section">
+        <div class="sec-header sec-amber">
+          <span class="sec-id" style="color:var(--amber)">SEC-02</span>
+          <div class="sec-line" style="background:linear-gradient(90deg,rgba(245,158,11,.5),transparent)"></div>
+          <h2 class="sec-name">Stores</h2>
+          <div class="sec-line sec-line-r" style="background:linear-gradient(270deg,rgba(245,158,11,.5),transparent)"></div>
         </div>
-      </a>
-      <a href="/gear.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img id="ht-icon" src="/images/yellow-ht-icon.png" alt="HT Icon">
-          </div>
-          <h3>Gear Calculator</h3>
-          <p>Compare the stats between two gear</p>
+        <div class="cards-grid">
+          <a href="/ssc-store.html" class="card card-amber">
+            <span class="card-corner"></span>
+            <div class="card-tag">SSC</div>
+            <div class="card-icon"><img src="/images/sscstore-icon.png" alt=""></div>
+            <h3>Seal Stone Chaos Store</h3>
+            <p>Plan your Seal Stone Chaos purchases.</p>
+          </a>
+          <a href="/mastersstore.html" class="card card-amber">
+            <span class="card-corner"></span>
+            <div class="card-tag">MASTERS</div>
+            <div class="card-icon"><img src="/images/rankedmatchstore-icon.png" alt=""></div>
+            <h3>Masters Store</h3>
+            <p>Plan your Masters Store purchases.</p>
+          </a>
+          <a href="/rankedmatchstore.html" class="card card-amber">
+            <span class="card-corner"></span>
+            <div class="card-tag">RANKED</div>
+            <div class="card-icon"><img src="/images/rankedmatchstore-icon.png" alt=""></div>
+            <h3>Ranked Match Store</h3>
+            <p>Plan your Ranked Match purchases.</p>
+          </a>
+          <a href="/elstore.html" class="card card-amber">
+            <span class="card-corner"></span>
+            <div class="card-tag">EL</div>
+            <div class="card-icon"><img src="/images/powerstation-icon.png" alt=""></div>
+            <h3>EL Store</h3>
+            <p>Plan your Eternal Land purchases.</p>
+          </a>
+          <a href="archive/edstore.html" class="card card-amber">
+            <span class="card-corner"></span>
+            <div class="card-tag">ED</div>
+            <div class="card-icon"><img src="/images/ED-icon.png" alt=""></div>
+            <h3>ED Store</h3>
+            <p>Plan your Enigma Dominators purchases.</p>
+          </a>
         </div>
-      </a>
-      <a href="/vit.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/vit-icon.png" alt="VIT Icon">
-          </div>
-          <h3>VIT Calculator</h3>
-          <p>How much VIT do I have saved up?</p>
+      </section>
+
+      <!-- ── Eternal Land ── -->
+      <section id="eternalland" class="section">
+        <div class="sec-header">
+          <span class="sec-id" style="color:var(--sky)">SEC-03</span>
+          <div class="sec-line" style="background:linear-gradient(90deg,rgba(56,189,248,.5),transparent)"></div>
+          <h2 class="sec-name">Eternal Land</h2>
+          <div class="sec-line sec-line-r" style="background:linear-gradient(270deg,rgba(56,189,248,.5),transparent)"></div>
         </div>
-      </a>
-      <a href="/VIP.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/VIP-icon.png" alt="VIP Icon">
-          </div>
-          <h3>VIP Calculator</h3>
-          <p>Do you <strong>really</strong> want to know how much you've spent?</p>
+        <div class="cards-grid">
+          <a href="/elpoints.html" class="card card-sky">
+            <span class="card-corner"></span>
+            <div class="card-tag">RANKINGS</div>
+            <div class="card-icon"><img src="/images/eternalcity-icon.png" alt=""></div>
+            <h3>EL Rankings Simulator</h3>
+            <p>Simulate the rankings for your EL.</p>
+          </a>
+          <a href="/vit.html" class="card card-sky">
+            <span class="card-corner"></span>
+            <div class="card-tag">VIT</div>
+            <div class="card-icon"><img src="/images/vit-icon.png" alt=""></div>
+            <h3>VIT Calculator</h3>
+            <p>Calculate your EL individual points.</p>
+          </a>
         </div>
-      </a>
-      <a href="/pets.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/pets-icon.png" alt="Pets Icon">
-          </div>
-          <h3>Pets Calculator</h3>
-          <p>Find out the max stats for gold or purple pets! Made in collaboration with Tex (s2864)</p>
+      </section>
+
+      <!-- ── Enigma Dominators ── -->
+      <section id="enigmadominators" class="section">
+        <div class="sec-header">
+          <span class="sec-id" style="color:var(--red)">SEC-04</span>
+          <div class="sec-line" style="background:linear-gradient(90deg,rgba(239,68,68,.5),transparent)"></div>
+          <h2 class="sec-name">Enigma Dominators</h2>
+          <div class="sec-line sec-line-r" style="background:linear-gradient(270deg,rgba(239,68,68,.5),transparent)"></div>
         </div>
-      </a>
-      <a href="/techdonations.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/expansion-icon.png" alt="Expansion Icon">
-          </div>
-          <h3>Tech Donation Calculator</h3>
-          <p>Calculate how long it will take you to complete Territorial Expansion or A New Era of Glory!</p>
+        <div class="cards-grid">
+          <a href="archive/edstore.html" class="card card-red">
+            <span class="card-corner"></span>
+            <div class="card-tag">STORE</div>
+            <div class="card-icon"><img src="/images/ED-icon.png" alt=""></div>
+            <h3>ED Store</h3>
+            <p>Plan your ED purchases.</p>
+          </a>
+          <a href="archive/EnigmaDominators.html" class="card card-red">
+            <span class="card-corner"></span>
+            <div class="card-tag">MAP</div>
+            <div class="card-icon"><img src="/images/ED-icon.png" alt=""></div>
+            <h3>ED Map</h3>
+            <p>Interactive map from ED 2025.</p>
+          </a>
         </div>
-      </a>
-    </div>
-  </section>
-  <section id="stores" class="section">
-    <h2 class="section-title">Stores</h2>
-    <div class="cards-grid">
-      <a href="/ssc-store.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/sscstore-icon.png" alt="Seal Stone Chaos Store Icon">
-          </div>
-          <h3>Seal Stone Chaos Store</h3>
-          <p>Figure out what you want to buy from the Seal Stone chaos Store</p>
+      </section>
+
+      <!-- ── Friends' Tools ── -->
+      <section id="friends" class="section">
+        <div class="sec-header">
+          <span class="sec-id" style="color:var(--violet)">SEC-05</span>
+          <div class="sec-line" style="background:linear-gradient(90deg,rgba(129,140,248,.5),transparent)"></div>
+          <h2 class="sec-name">Friends' Tools <span class="sec-tag">s2864</span></h2>
+          <div class="sec-line sec-line-r" style="background:linear-gradient(270deg,rgba(129,140,248,.5),transparent)"></div>
         </div>
-      </a>
-      <a href="/mastersstore.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/rankedmatchstore-icon.png" alt="Ranked Match Store Icon">
-          </div>
-          <h3>Masters Store</h3>
-          <p>Figure out what you want to buy from the Masters Store</p>
+        <div class="cards-grid">
+          <a href="https://2864tw.com/decor-index.html" class="card card-violet" target="_blank" rel="noopener">
+            <span class="card-corner"></span>
+            <div class="card-tag">DECORATIONS ↗</div>
+            <div class="card-icon"><img src="https://2864tw.com/assets/decor-icons/bonfire.png" alt="" onerror="this.style.display='none'"></div>
+            <h3>Decoration Index</h3>
+            <p>All decorations with buff values, upgrade costs, and mutual exclusivity.</p>
+          </a>
+          <a href="https://2864tw.com/battle-report.html" class="card card-violet" target="_blank" rel="noopener">
+            <span class="card-corner"></span>
+            <div class="card-tag">BATTLE REPORTS ↗</div>
+            <div class="card-icon"><img src="/images/feedback-icon.png" alt=""></div>
+            <h3>Battle Report Viewer</h3>
+            <p>Full battle breakdowns — heroes, skills, units, and gear.</p>
+          </a>
+          <a href="https://2864tw.com/heroes.html" class="card card-violet" target="_blank" rel="noopener">
+            <span class="card-corner"></span>
+            <div class="card-tag">HEROES ↗</div>
+            <div class="card-icon"><img src="/images/rankedmatchstore-icon.png" alt=""></div>
+            <h3>Heroes Database</h3>
+            <p>Full hero roster with stats, exclusive skills, and titan gear.</p>
+          </a>
+          <a href="https://2864tw.com/bases.html" class="card card-violet" target="_blank" rel="noopener">
+            <span class="card-corner"></span>
+            <div class="card-tag">BASE SKINS ↗</div>
+            <div class="card-icon"><img src="/images/expansion-icon.png" alt=""></div>
+            <h3>Base Skins Database</h3>
+            <p>Castle skins with city skills, upgrade paths, and icon gallery.</p>
+          </a>
+          <a href="https://2864tw.com/ssc-map.html" class="card card-violet" target="_blank" rel="noopener">
+            <span class="card-corner"></span>
+            <div class="card-tag">UD MAP ↗</div>
+            <div class="card-icon"><img src="/images/sscstore-icon.png" alt=""></div>
+            <h3>UD Sector Map</h3>
+            <p>Interactive sector map with round history, land buffs, and neutral cities.</p>
+          </a>
         </div>
-      </a>
-      <a href="/rankedmatchstore.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/rankedmatchstore-icon.png" alt="Ranked Match Store Icon">
-          </div>
-          <h3>Ranked Match Store</h3>
-          <p>Figure out what you want to buy from the Ranked Match Store</p>
+      </section>
+
+      <!-- ── Feedback ── -->
+      <section id="feedback" class="section">
+        <div class="sec-header">
+          <span class="sec-id" style="color:var(--muted)">SEC-06</span>
+          <div class="sec-line" style="background:linear-gradient(90deg,rgba(90,138,153,.4),transparent)"></div>
+          <h2 class="sec-name">Feedback &amp; Support</h2>
+          <div class="sec-line sec-line-r" style="background:linear-gradient(270deg,rgba(90,138,153,.4),transparent)"></div>
         </div>
-      </a>
-      <a href="/elstore.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/powerstation-icon.png" alt="Power Station Icon">
-          </div>
-          <h3>EL Store</h3>
-          <p>Figure out what you want to buy from the EL Store</p>
+        <div class="cards-grid">
+          <a href="#" class="card" onclick="openFeedbackModal(); return false;">
+            <span class="card-corner"></span>
+            <div class="card-tag">REPORT / SUGGEST</div>
+            <div class="card-icon"><img src="/images/feedback-icon.png" alt=""></div>
+            <h3>Submit Feedback</h3>
+            <p>Found a bug? Got an idea? Let us know.</p>
+          </a>
+          <a href="#" class="card" onclick="openSupportModal(); return false;">
+            <span class="card-corner"></span>
+            <div class="card-tag">SUPPORT</div>
+            <div class="card-icon"><img src="/images/coffee-icon.png" alt=""></div>
+            <h3>Buy Me a Coffee</h3>
+            <p>If this site has helped you, consider supporting its creators.</p>
+          </a>
         </div>
-      </a>
-      <a href="archive/edstore.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/ED-icon.png" alt="ED Icon">
-          </div>
-          <h3>ED Store</h3>
-          <p>Figure out what you want to buy from the ED Store</p>
-        </div>
-      </a>
-    </div>
-  </section>
-  <section id="eternalland" class="section">
-    <h2 class="section-title">Eternal Land</h2>
-    <div class="cards-grid">
-      <a href="/elpoints.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/eternalcity-icon.png" alt="Eternal City Icon">
-          </div>
-          <h3>EL Rankings Simulator</h3>
-          <p>Simulate the rankings for your EL</p>
-        </div>
-      </a>
-      <a href="/vit.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/vit-icon.png" alt="VIT Icon">
-          </div>
-          <h3>VIT Calculator</h3>
-          <p>Use the VIT calculator to calculate your EL individual points!</p>
-        </div>
-      </a>
-    </div>
-  </section>
-  <section id="enigmadominators" class="section">
-    <h2 class="section-title">Enigma Dominators</h2>
-    <div class="cards-grid">
-      <a href="archive/edstore.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/ED-icon.png" alt="ED Icon">
-          </div>
-          <h3>ED Store</h3>
-          <p>Figure out what you want to buy from the ED Store</p>
-        </div>
-      </a>
-      <a href="archive/EnigmaDominators.html" class="card-link">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/ED-icon.png" alt="ED Icon">
-          </div>
-          <h3>ED Map</h3>
-          <p>Interactive map from ED 2025.</p>
-        </div>
-      </a>
-    </div>
-  </section>
-  <section id="friends" class="section section-external">
-    <h2 class="section-title">Tools from Friends (s2864)</h2>
-    <div class="cards-grid">
-      <a href="https://2864tw.com/decor-index.html" class="card-link" target="_blank" rel="noopener">
-        <div class="card">
-          <div class="card-icon">
-            <img src="https://2864tw.com/assets/decor-icons/bonfire.png" alt="Decoration Icon" onerror="this.style.display='none'">
-          </div>
-          <h3>Decoration Index</h3>
-          <p>Browse all in-game decorations with buff values, upgrade costs, and mutual exclusivity info.</p>
-        </div>
-      </a>
-      <a href="https://2864tw.com/battle-report.html" class="card-link" target="_blank" rel="noopener">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/feedback-icon.png" alt="Battle Report Icon">
-          </div>
-          <h3>Battle Report Viewer</h3>
-          <p>Enter a report ID to view full battle breakdowns — heroes, skills, units, and gear.</p>
-        </div>
-      </a>
-      <a href="https://2864tw.com/heroes.html" class="card-link" target="_blank" rel="noopener">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/rankedmatchstore-icon.png" alt="Heroes Icon">
-          </div>
-          <h3>Heroes Database</h3>
-          <p>Full hero roster with stats, exclusive skills, and titan gear recommendations from Tex's Armory.</p>
-        </div>
-      </a>
-      <a href="https://2864tw.com/bases.html" class="card-link" target="_blank" rel="noopener">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/expansion-icon.png" alt="Bases Icon">
-          </div>
-          <h3>Base Skins Database</h3>
-          <p>All castle skins with city skills, upgrade paths, and icon gallery.</p>
-        </div>
-      </a>
-      <a href="https://2864tw.com/ssc-map.html" class="card-link" target="_blank" rel="noopener">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/sscstore-icon.png" alt="SSC Map Icon">
-          </div>
-          <h3>UD Sector Map</h3>
-          <p>Interactive UD Sector Map with round history, land buffs, and neutral city tracking.</p>
-        </div>
-      </a>
-    </div>
-  </section>
-  <section id="feedback" class="section">
-    <h2 class="section-title">Feedback / Support</h2>
-    <div class="cards-grid">
-      <a href="#" class="card-link" onclick="openFeedbackModal(); return false;">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/feedback-icon.png" alt="Feedback Icon">
-          </div>
-          <h3>Submit Feedback</h3>
-          <p>Found a bug? Got an idea? Let us know what you'd like to see!</p>
-        </div>
-      </a>
-      <a href="#" class="card-link" onclick="openSupportModal(); return false;">
-        <div class="card">
-          <div class="card-icon">
-            <img src="/images/coffee-icon.png" alt="Coffee Icon" />
-          </div>
-          <h3>Support / Buy Me a Coffee</h3>
-          <p>If this site has helped you, consider supporting it's creators!</p>
-        </div>
-      </a>
-    </div>
-  </section>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p><strong>Special thanks to:</strong></p>
+        <p>
+          <strong>Tex (s2864)</strong> — data for the <a href="/pets.html">Pets Calculator</a>, <a href="/guides/chaoscrafting.html">Chaos Crafting Guide</a>, and the <a href="https://2864tw.com" target="_blank" rel="noopener">tools from s2864</a> above.<br>
+          <strong>Bobgrif</strong> — data for various guides.<br>
+          <strong>tzup</strong> — data for the <a href="https://mathomhouse.github.io/archive/EnigmaDominators.html">Enigma Dominator 2025 Map</a>.<br>
+          <strong>Mischief (s3355)</strong> — inspiration for Mathom House. <a href="https://alexilys.github.io/index.html" target="_blank" rel="noopener">Visit her site.</a>
+        </p>
+      </div>
+    </footer>
+
+  </div><!-- /.main-wrapper -->
 
   <button id="backToTop" onclick="scrollToTop()" title="Back to top" aria-label="Back to top">
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
   </button>
 
+  <!-- Feedback Modal -->
   <div id="feedback-modal" class="modal hidden">
     <div class="modal-content">
       <h2>Send Feedback</h2>
-
-      <label for="feedback-type">Type of Feedback:</label>
+      <label for="feedback-type">Type</label>
       <select id="feedback-type">
         <option value="General">General</option>
         <option value="Guides">Guides</option>
@@ -327,45 +359,33 @@
         <option value="Feature Request">Feature Request</option>
         <option value="Design/UI">Design/UI</option>
       </select>
-
-      <label for="modal-feedback-input">Your Feedback:</label>
-      <textarea id="modal-feedback-input" placeholder="Let us know what you're thinking..." rows="5"
-        maxlength="500"></textarea>
+      <label for="modal-feedback-input">Your Feedback</label>
+      <textarea id="modal-feedback-input" placeholder="Let us know what you're thinking..." rows="5" maxlength="500"></textarea>
       <small><span id="char-count">0</span>/500</small>
-
-      <label for="discord-name">Discord Username (optional):</label>
+      <label for="discord-name">Discord Username (optional)</label>
       <input type="text" id="discord-name" placeholder="e.g., .gikey" />
-
       <div class="modal-buttons">
         <button onclick="submitModalFeedback()">Submit</button>
-        <button onclick="closeFeedbackModal()">Cancel</button>
+        <button class="btn-ghost" onclick="closeFeedbackModal()">Cancel</button>
       </div>
-
-      <div id="feedback-confirmation" class="confirmation-message hidden">✅ Feedback sent! Thank you!</div>
+      <div id="feedback-confirmation" class="confirmation-message hidden">Feedback sent — thank you!</div>
     </div>
   </div>
   <div id="modal-backdrop" class="modal-backdrop hidden" onclick="closeFeedbackModal()"></div>
-  <div id="toast" class="toast">✅ Feedback submitted!</div>
+  <div id="toast" class="toast">Feedback submitted!</div>
+
+  <!-- Support Modal -->
   <div id="support-modal" class="modal hidden">
     <div class="modal-content">
-      <h2>☕ Support This Site</h2>
-      <p>If you enjoy using these tools and wish to support its creators, please do so here via 'Buy Me a Coffee.' </p>
+      <h2>Support This Site</h2>
+      <p>If these tools have helped you, consider supporting the creators via Buy Me a Coffee.</p>
       <a href="https://www.buymeacoffee.com/gikey" target="_blank" rel="noopener" class="coffee-btn">Buy Me a Coffee</a>
       <div class="modal-buttons">
-        <button onclick="closeSupportModal()">Close</button>
+        <button class="btn-ghost" onclick="closeSupportModal()">Close</button>
       </div>
     </div>
   </div>
   <div id="support-backdrop" class="modal-backdrop hidden" onclick="closeSupportModal()"></div>
-
-<footer class="site-footer">
-  <p><strong>Special thanks to:</strong><br>
-    <strong>Tex (s2864)</strong> for data used to make the <a href="/pets.html">Pets Calculator</a> and <a href="/guides/chaoscrafting.html">Chaos Crafting Guide</a>! Also for the <a href="https://2864tw.com" target="_blank" rel="noopener">tools from s2864</a> above.<br>
-    <strong>Bobgrif</strong> for data used to make various guides<br>
-    <strong>tzup</strong> for data used to populate the <a href="https://mathomhouse.github.io/archive/EnigmaDominators.html">Enigma Dominator 2025 Map</a><br>
-    <strong>Mischief (s3355)</strong> for the inspiration to develop Mathom House in the first place &mdash; <a href="https://alexilys.github.io/index.html" target="_blank" rel="noopener">visit her site here</a>
-  </p>
-</footer>
 
 </body>
 </html>

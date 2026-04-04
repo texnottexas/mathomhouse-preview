@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('discord-name').value = '';
       charCount.textContent = '0';
   
-      showToast("✅ Feedback submitted!");
+      showToast("Feedback submitted!");
       setTimeout(() => closeFeedbackModal(), 3000);
     };
   

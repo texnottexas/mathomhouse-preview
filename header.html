@@ -1,76 +1,63 @@
 <script>
-  /* Apply saved theme before any render to prevent flash of light mode */
   (function() {
     var t = localStorage.getItem('theme');
-    if (t === 'light') document.documentElement.dataset.theme = 'light';
-    /* dark is default — no attribute needed */
+    if (t === 'light') {
+      document.documentElement.dataset.theme = 'light';
+      document.body.dataset.theme = 'light';
+    }
   })();
 </script>
-<link rel="stylesheet" href="/styles/header.css">
-<link rel="icon" href="/cutelogo.ico" type="image/x-icon">
-<div id="hamburger" class="menu-toggle" onclick="toggleDropdown()">
-  <div class="bar"></div>
-  <div class="bar"></div>
-  <div class="bar"></div>
-</div>
-<div class="logo" style="color: white"><a href="/index.html">Mathom House</a></div>
-<div class="header-right">
-  <button class="theme-toggle" id="themeToggle" title="Toggle light/dark mode" aria-label="Toggle light/dark mode">
-    <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-    <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-  </button>
-</div>
-<nav id="nav">
-  <a href="/index.html">Home</a>
 
-  <div class="submenu-container">
-    <a href="#">Calculators &#9658;</a>
-    <div class="submenu">
-      <a href="/equipment.html">Equipment</a>
-      <a href="/vit.html">VIT</a>
-      <a href="/gems.html">Gems</a>
-      <a href="/components.html">Components</a>
-      <a href="/exclusives.html">Exclusive Skills</a>
-      <a href="/gear.html">Stat Comparisons</a>
-      <a href="/resources.html">Resources</a>
-      <a href="/VIP.html">VIP</a>
-      <a href="/pets.html">Pets</a>
-      <a href="/techdonations.html">Tech Donations</a>
-    </div>
+<div class="sidebar-header">
+  <a href="/" class="sidebar-logo">
+    <span class="logo-text">MATHOM<span class="logo-accent">HOUSE</span></span>
+    <span class="logo-sub">Top War &middot; Community Hub</span>
+  </a>
+</div>
+
+<nav class="sidebar-nav">
+  <div class="nav-group">
+    <span class="nav-label">Calculators</span>
+    <a href="/exclusives.html" class="nav-item"><span class="nav-dot" style="--dot:var(--teal)"></span>ES Calculator</a>
+    <a href="/gems.html" class="nav-item"><span class="nav-dot" style="--dot:var(--teal)"></span>Gem Calculator</a>
+    <a href="/equipment.html" class="nav-item"><span class="nav-dot" style="--dot:var(--teal)"></span>Equipment</a>
+    <a href="/components.html" class="nav-item"><span class="nav-dot" style="--dot:var(--teal)"></span>Components</a>
+    <a href="/resources.html" class="nav-item"><span class="nav-dot" style="--dot:var(--teal)"></span>Resources</a>
+    <a href="/gear.html" class="nav-item"><span class="nav-dot" style="--dot:var(--teal)"></span>Gear Compare</a>
+    <a href="/vit.html" class="nav-item"><span class="nav-dot" style="--dot:var(--teal)"></span>VIT</a>
+    <a href="/VIP.html" class="nav-item"><span class="nav-dot" style="--dot:var(--teal)"></span>VIP</a>
+    <a href="/pets.html" class="nav-item"><span class="nav-dot" style="--dot:var(--teal)"></span>Pets</a>
+    <a href="/techdonations.html" class="nav-item"><span class="nav-dot" style="--dot:var(--teal)"></span>Tech Donations</a>
   </div>
-  <div class="submenu-container">
-    <a href="#">Stores &#9658;</a>
-    <div class="submenu">
-      <a href="/ssc-store.html">Seal Stone Chaos</a>
-      <a href="/mastersstore.html">Masters</a>
-      <a href="/rankedmatchstore.html">Ranked Match</a>
-      <a href="/elstore.html">Eternal Land</a>
-      <a href="/archive/edstore.html">Enigma Dominators</a>
-    </div>
+
+  <div class="nav-group">
+    <span class="nav-label">Stores</span>
+    <a href="/ssc-store.html" class="nav-item"><span class="nav-dot" style="--dot:var(--amber)"></span>Seal Stone Chaos</a>
+    <a href="/mastersstore.html" class="nav-item"><span class="nav-dot" style="--dot:var(--amber)"></span>Masters</a>
+    <a href="/rankedmatchstore.html" class="nav-item"><span class="nav-dot" style="--dot:var(--amber)"></span>Ranked Match</a>
+    <a href="/elstore.html" class="nav-item"><span class="nav-dot" style="--dot:var(--amber)"></span>EL Store</a>
+    <a href="/archive/edstore.html" class="nav-item"><span class="nav-dot" style="--dot:var(--amber)"></span>ED Store</a>
   </div>
-  <a href="/guides.html">Guides</a>
-  <div class="submenu-container">
-    <a href="#">Eternal Land &#9658;</a>
-    <div class="submenu">
-      <a href="/elstore.html">EL Store</a>
-      <a href="/elpoints.html">EL Rankings Simulator</a>
-    </div>
+
+  <div class="nav-group">
+    <span class="nav-label">Events</span>
+    <a href="/elpoints.html" class="nav-item"><span class="nav-dot" style="--dot:var(--sky)"></span>EL Rankings Sim</a>
+    <a href="/archive/EnigmaDominators.html" class="nav-item"><span class="nav-dot" style="--dot:var(--red)"></span>ED Map</a>
   </div>
-  <div class="submenu-container">
-    <a href="#">Enigma Dominators &#9658;</a>
-    <div class="submenu">
-      <a href="/archive/EnigmaDominators.html">ED Map</a>
-      <a href="/archive/edstore.html">ED Store</a>
-    </div>
-  </div>
-  <div class="submenu-container">
-    <a href="#">Friends&#39; Tools &#9658;</a>
-    <div class="submenu">
-      <a href="https://2864tw.com/decor-index.html" target="_blank" rel="noopener">Decoration Index</a>
-      <a href="https://2864tw.com/battle-report.html" target="_blank" rel="noopener">Battle Report Viewer</a>
-      <a href="https://2864tw.com/heroes.html" target="_blank" rel="noopener">Heroes Database</a>
-      <a href="https://2864tw.com/bases.html" target="_blank" rel="noopener">Base Skins Database</a>
-      <a href="https://2864tw.com/ssc-map.html" target="_blank" rel="noopener">UD Sector Map</a>
-    </div>
+
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <a href="/guides.html" class="nav-item"><span class="nav-dot" style="--dot:var(--violet)"></span>Guides</a>
+    <a href="https://2864tw.com/decor-index.html" class="nav-item" target="_blank" rel="noopener"><span class="nav-dot" style="--dot:var(--violet)"></span>Decoration Index ↗</a>
+    <a href="https://2864tw.com/heroes.html" class="nav-item" target="_blank" rel="noopener"><span class="nav-dot" style="--dot:var(--violet)"></span>Heroes DB ↗</a>
+    <a href="https://2864tw.com/battle-report.html" class="nav-item" target="_blank" rel="noopener"><span class="nav-dot" style="--dot:var(--violet)"></span>Battle Reports ↗</a>
   </div>
 </nav>
+
+<div class="sidebar-footer">
+  <button class="sidebar-theme-btn" id="themeToggle" title="Toggle light/dark" aria-label="Toggle theme">
+    <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    <span class="sidebar-theme-label">Dark mode</span>
+  </button>
+</div>

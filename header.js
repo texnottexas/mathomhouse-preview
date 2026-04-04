@@ -8,8 +8,21 @@ const gaScript2 = document.createElement('script');
 gaScript2.textContent = 'window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-4R1NPM39PL");';
 document.head.appendChild(gaScript2);
 
+function headerRoot() {
+  // Compute path to deployment root — works in both root and subdirectory deployments
+  // On user github.io page (mathomhouse.github.io/): root is depth 0
+  // On project github.io page (texnottexas.github.io/mathomhouse-preview/): root is depth 1
+  const parts = location.pathname.split('/').filter(Boolean);
+  const isFile = parts.length > 0 && parts[parts.length - 1].includes('.');
+  const dirParts = isFile ? parts.slice(0, -1) : parts;
+  const rootDepth = location.hostname.endsWith('.github.io') && parts.length > 0
+    && location.hostname.split('.')[0] !== parts[0] ? 1 : 0;
+  const steps = Math.max(0, dirParts.length - rootDepth);
+  return steps > 0 ? '../'.repeat(steps) : './';
+}
+
 function loadHeader() {
-  fetch('/header.html')
+  fetch(headerRoot() + 'header.html')
     .then(res => res.text())
     .then(html => {
       const placeholder = document.getElementById('header-placeholder');

@@ -18,6 +18,16 @@ body {
   background: var(--bg);
   color: var(--text);
   transition: background 0.3s, color 0.3s;
+  /* Offset all page content past the fixed sidebar on desktop */
+  padding-left: var(--sidebar-w, 240px);
+}
+
+@media (max-width: 900px) {
+  body {
+    padding-left: 0;
+    /* Add room for the fixed mobile topbar */
+    padding-top: var(--topbar-h, 52px);
+  }
 }
 
 /* ── SIDEBAR ── */
@@ -219,11 +229,47 @@ body {
   filter: none; transform: none;
 }
 
+/* ── MOBILE TOPBAR (inside sidebar, shown on mobile only) ── */
+.mobile-topbar {
+  display: none;
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--topbar-h, 52px);
+  background: #111620;
+  border-bottom: 1px solid rgba(0,212,170,0.12);
+  z-index: 400;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+}
+.mobile-burger {
+  display: flex; flex-direction: column; gap: 4px;
+  background: none; border: none; padding: 6px;
+  cursor: pointer; clip-path: none; width: auto;
+  transform: none; filter: none;
+}
+.mobile-burger:hover { background: none; filter: none; transform: none; }
+.mobile-burger span { width: 20px; height: 2px; background: rgba(200,224,238,0.7); display: block; }
+.mobile-brand {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 17px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: #c8e0ee; text-decoration: none; flex: 1;
+}
+.mobile-brand span { color: var(--teal, #00d4aa); }
+.mobile-topbar .theme-toggle {
+  background: none; border: none; padding: 6px; color: rgba(200,224,238,0.6);
+  cursor: pointer; clip-path: none; width: auto; transform: none;
+  display: flex; align-items: center;
+}
+.mobile-topbar .theme-toggle:hover { color: var(--teal,#00d4aa); filter: none; transform: none; }
+
 /* ── MOBILE: sidebar becomes drawer ── */
 @media (max-width: 900px) {
+  .mobile-topbar { display: flex; }
   #header-placeholder {
     transform: translateX(-100%);
     transition: transform 0.3s ease;
+    /* Sidebar drops below the mobile topbar */
+    padding-top: var(--topbar-h, 52px);
   }
   #header-placeholder.sidebar-open {
     transform: translateX(0);

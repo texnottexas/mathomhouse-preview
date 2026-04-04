@@ -3,15 +3,6 @@
    Sidebar stays dark in both light and dark mode (VS Code pattern)
    ================================================================ */
 
-/* Prevent flash */
-#header-placeholder {
-  width: var(--sidebar-w, 240px);
-  min-height: 100vh;
-  background: #080c15;
-  position: fixed; top: 0; left: 0;
-  z-index: 300;
-}
-
 html { scroll-behavior: smooth; }
 
 body {
@@ -31,8 +22,10 @@ body {
 }
 
 /* ── SIDEBAR ── */
+/* Applied via both #id (all pages) and .class (index.html explicitly) */
+#header-placeholder,
 .sidebar {
-  width: var(--sidebar-w);
+  width: var(--sidebar-w, 240px);
   height: 100vh;
   position: fixed; top: 0; left: 0;
   z-index: 300;

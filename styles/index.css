@@ -351,20 +351,22 @@ main { padding: 0 40px 40px; max-width: 1400px; }
 }
 
 /* ── FOOTER ── */
+/* Footer bg is always dark (#080c15) regardless of theme, so text
+   colors are hardcoded to dark-mode values — never inherit light theme. */
 .site-footer {
   background: var(--sidebar-bg);
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(0,212,170,0.12);
   margin-top: 40px;
 }
 .footer-inner {
   max-width: 1400px;
   padding: 32px 40px;
   font-size: 13px; line-height: 2;
-  color: var(--muted);
+  color: rgba(140, 170, 190, 0.65);
 }
-.footer-inner strong { color: color-mix(in srgb, var(--text) 70%, var(--muted)); font-weight: 600; }
-.footer-inner a { color: var(--teal); }
-.footer-inner a:hover { text-decoration: underline; }
+.footer-inner strong { color: #9ab8cc; font-weight: 600; }
+.footer-inner a { color: #00d4aa; }
+.footer-inner a:hover { color: #33ddb8; text-decoration: underline; }
 .footer-inner p + p { margin-top: 8px; }
 
 /* ── BACK TO TOP ── */

@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src https://raw.githubusercontent.com https://knight-cdn.akamaized.net https://h5.topwargame.com data:; connect-src https://raw.githubusercontent.com; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'self'">
+<title>Heroes Database — Mathom House</title>
+<style>
+  :root {
+    --bg: #0d1117; --surface: #161b22; --card: #1c2128; --border: #30363d;
+    --text: #e6edf3; --muted: #8b949e; --accent: #79c0ff;
+    --army: #3fb950; --navy: #388bfd; --air: #d29922; --purple: #a371f7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+  /* Header */
+  .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: .75rem 1rem; display: flex; align-items: center; gap: .75rem; position: sticky; top: 0; z-index: 100; }
+  .header h1 { font-size: 1rem; font-weight: 600; flex: 1; }
+  .home-btn { display: flex; align-items: center; justify-content: center; background: var(--card); border: 1px solid var(--border); color: var(--muted); border-radius: 8px; padding: .4rem .6rem; text-decoration: none; transition: all .15s; }
+  .home-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-count { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: .15rem .55rem; font-size: .7rem; color: var(--muted); font-weight: 600; }
+
+  /* Search bar */
+  .search-bar { max-width: 1200px; margin: 1.25rem auto .75rem; padding: 0 1rem; width: 100%; }
+  .search-bar input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: .6rem .75rem; color: var(--text); font-size: .85rem; outline: none; box-sizing: border-box; }
+  .search-bar input:focus { border-color: var(--accent); }
+  .search-bar input::placeholder { color: var(--muted); }
+
+  /* Filter rows */
+  .filter-row { max-width: 1200px; margin: 0 auto .5rem; padding: 0 1rem; width: 100%; display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; }
+  .filter-label { font-size: .7rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .03em; margin-right: .2rem; }
+  .fpill { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: .25rem .65rem; font-size: .75rem; color: var(--muted); cursor: pointer; white-space: nowrap; transition: all .15s; user-select: none; }
+  .fpill:hover { border-color: var(--accent); color: var(--accent); }
+  .fpill.active { font-weight: 600; }
+  .fpill.type-all.active { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .fpill.type-army.active { background: var(--army); border-color: var(--army); color: var(--bg); }
+  .fpill.type-navy.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .fpill.type-air.active { background: var(--air); border-color: var(--air); color: var(--bg); }
+  .fpill.type-decor.active { background: var(--red); border-color: var(--red); color: #fff; }
+  .fpill.effect.active { background: rgba(121,192,255,.15); border-color: var(--accent); color: var(--accent); }
+  .fpill.more-toggle { border-style: dashed; font-size: .7rem; }
+
+  /* Status */
+  .status { text-align: center; padding: .5rem 1rem; color: var(--muted); font-size: .85rem; }
+  .status.error { color: #f85149; }
+
+  /* Content */
+  #content { max-width: 1200px; margin: 0 auto 2rem; padding: 0 1rem; width: 100%; flex: 1; }
+  .section-header { font-size: .85rem; text-transform: uppercase; letter-spacing: .05em; font-weight: 700; padding: .75rem 0 .5rem; border-bottom: 1px solid var(--border); margin: 1rem 0 .75rem; display: flex; align-items: center; gap: .5rem; cursor: pointer; user-select: none; }
+  .section-header:hover { opacity: .85; }
+  .section-header .badge { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: .1rem .45rem; font-size: .7rem; color: var(--muted); font-weight: 600; }
+  .section-header .chevron { font-size: .7rem; transition: transform .2s; }
+  .section-header .chevron.collapsed { transform: rotate(-90deg); }
+  .section-header.ssr { color: var(--air); }
+  .section-header.sr { color: var(--purple); }
+  .section-header.r { color: #58a6ff; }
+
+  /* Hero card grid */
+  .hero-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: .75rem; }
+  .hero-grid.hidden { display: none; }
+  .no-results { text-align: center; padding: 2rem; color: var(--muted); font-size: .85rem; grid-column: 1 / -1; }
+
+  /* Hero card */
+  .hcard { position: relative; border-radius: 10px; overflow: hidden; cursor: pointer; border: 2px solid var(--border); transition: all .2s; background: var(--card); aspect-ratio: 3/4; }
+  .hcard:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.4); }
+  .hcard.army:hover { border-color: var(--army); box-shadow: 0 4px 16px rgba(63,185,80,.2); }
+  .hcard.navy:hover { border-color: var(--navy); box-shadow: 0 4px 16px rgba(56,139,253,.2); }
+  .hcard.air:hover { border-color: var(--air); box-shadow: 0 4px 16px rgba(210,153,34,.2); }
+  .hcard-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hcard-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: .5rem .6rem .4rem; background: linear-gradient(transparent, rgba(0,0,0,.85) 40%); display: flex; align-items: flex-end; gap: .35rem; }
+  .hcard-name { font-size: .8rem; font-weight: 700; line-height: 1.2; text-shadow: 0 1px 3px rgba(0,0,0,.8); color: var(--text); flex: 1; }
+  .hcard-type-pill { font-size: .5rem; font-weight: 700; padding: .15rem .35rem; border-radius: 3px; white-space: nowrap; flex-shrink: 0; text-transform: uppercase; letter-spacing: .03em; }
+  .hcard-type-pill.army { background: rgba(63,185,80,.25); color: var(--army); border: 1px solid rgba(63,185,80,.4); }
+  .hcard-type-pill.navy { background: rgba(56,139,253,.25); color: var(--navy); border: 1px solid rgba(56,139,253,.4); }
+  .hcard-type-pill.air { background: rgba(210,153,34,.25); color: var(--air); border: 1px solid rgba(210,153,34,.4); }
+  .hcard-type-pill.decor { background: rgba(248,81,73,.2); color: var(--red); border: 1px solid rgba(248,81,73,.35); }
+  .hcard-tags { position: absolute; top: .4rem; left: .4rem; display: flex; flex-direction: column; gap: .25rem; }
+  .hcard-tag { background: rgba(0,0,0,.7); border: 1px solid rgba(255,255,255,.15); border-radius: 4px; padding: .1rem .35rem; font-size: .55rem; color: var(--text); font-weight: 600; backdrop-filter: blur(4px); white-space: nowrap; }
+  .hcard-placeholder { width: 100%; height: 100%; background: linear-gradient(135deg, var(--surface), var(--card)); display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--muted); opacity: .3; }
+
+  /* Modal overlay */
+  .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.75); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(2px); }
+  .modal-overlay.hidden { display: none; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; max-width: 600px; width: 100%; max-height: 85vh; overflow-y: auto; }
+  .modal-header { display: flex; align-items: center; gap: .75rem; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--surface); z-index: 1; border-radius: 12px 12px 0 0; }
+  .modal-hero-img { width: 64px; height: 64px; border-radius: 8px; object-fit: cover; background: var(--card); border: 2px solid var(--border); flex-shrink: 0; }
+  .modal-hero-img.army { border-color: var(--army); }
+  .modal-hero-img.navy { border-color: var(--navy); }
+  .modal-hero-img.air { border-color: var(--air); }
+  .modal-hero-info { flex: 1; min-width: 0; }
+  .modal-hero-name { font-size: 1.1rem; font-weight: 700; }
+  .modal-hero-meta { display: flex; gap: .4rem; align-items: center; margin-top: .2rem; flex-wrap: wrap; }
+  .modal-stars { font-size: .75rem; color: var(--air); }
+  .modal-type-badge { font-size: .65rem; font-weight: 700; padding: .1rem .4rem; border-radius: 4px; }
+  .modal-type-badge.army { background: rgba(63,185,80,.15); color: var(--army); border: 1px solid rgba(63,185,80,.3); }
+  .modal-type-badge.navy { background: rgba(56,139,253,.15); color: var(--navy); border: 1px solid rgba(56,139,253,.3); }
+  .modal-type-badge.air { background: rgba(210,153,34,.15); color: var(--air); border: 1px solid rgba(210,153,34,.3); }
+  .modal-type-badge.ssr { background: rgba(210,153,34,.15); color: var(--air); border: 1px solid rgba(210,153,34,.3); }
+  .modal-type-badge.sr { background: rgba(163,113,247,.15); color: var(--purple); border: 1px solid rgba(163,113,247,.3); }
+  .modal-type-badge.r { background: rgba(88,166,255,.15); color: #58a6ff; border: 1px solid rgba(88,166,255,.3); }
+  .modal-type-badge.decor { background: rgba(248,81,73,.12); color: var(--red); border: 1px solid rgba(248,81,73,.25); }
+  .modal-release { font-size: .65rem; color: var(--muted); margin-left: auto; white-space: nowrap; }
+  .modal-close { background: none; border: none; color: var(--muted); font-size: 1.5rem; cursor: pointer; padding: .2rem .5rem; line-height: 1; flex-shrink: 0; }
+  .modal-close:hover { color: var(--text); }
+  .modal-body { padding: 1rem 1.25rem; }
+  .hero-bio { font-size: .78rem; line-height: 1.5; color: var(--muted); font-style: italic; padding: 0 .25rem .75rem; border-bottom: 1px solid var(--border); margin-bottom: .75rem; }
+
+  /* Skill sections */
+  .skill-section { margin-bottom: 1.25rem; }
+  .skill-section-title { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: .6rem; }
+  .skill-header { display: flex; align-items: center; gap: .6rem; margin-bottom: .75rem; }
+  .skill-icon { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; background: var(--card); flex-shrink: 0; }
+  .skill-icon.native { border: 2px solid var(--air); }
+  .skill-icon.exclusive { border: 2px solid var(--purple); }
+  .skill-info { flex: 1; min-width: 0; }
+  .skill-name { font-size: .95rem; font-weight: 600; }
+  .skill-label { font-size: .65rem; color: var(--muted); }
+  .sub-skill { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: .6rem .75rem; margin-bottom: .5rem; }
+  .sub-skill-title { font-size: .75rem; font-weight: 700; color: var(--accent); margin-bottom: .3rem; }
+  .sub-skill-desc { font-size: .8rem; line-height: 1.55; color: var(--text); }
+  .sub-skill-desc .val { color: var(--army); font-weight: 600; }
+  .sub-skill-desc .effect-name { color: var(--accent); cursor: pointer; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 2px; }
+  .sub-skill-desc .effect-name:hover { text-decoration-style: solid; }
+  .effect-tags-row { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .5rem; }
+  .effect-pill { background: rgba(121,192,255,.08); border: 1px solid rgba(121,192,255,.2); border-radius: 4px; padding: .1rem .4rem; font-size: .65rem; color: var(--accent); cursor: pointer; transition: background .15s; }
+  .effect-pill:hover { background: rgba(121,192,255,.2); }
+  .effect-tooltip { display: none; position: fixed; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: .6rem .75rem; font-size: .75rem; color: var(--text); line-height: 1.5; max-width: 280px; width: max-content; box-shadow: 0 4px 20px rgba(0,0,0,.6); z-index: 2000; }
+  .effect-tooltip .tip-title { font-weight: 700; color: var(--accent); margin-bottom: .25rem; font-size: .7rem; }
+  .effect-tooltip.visible { display: block; }
+
+  /* Exclusive skill */
+  .exclusive-section { border-top: 1px solid var(--border); padding-top: 1rem; }
+  .exclusive-desc { font-size: .8rem; line-height: 1.5; color: var(--text); margin-bottom: .75rem; padding: .6rem .75rem; background: var(--card); border: 1px solid var(--border); border-radius: 8px; }
+  .milestones { display: flex; flex-direction: column; gap: .4rem; }
+  .milestone { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: .5rem .7rem; display: flex; gap: .5rem; align-items: flex-start; }
+  .milestone-badge { background: var(--purple); color: #fff; font-size: .6rem; font-weight: 700; padding: .15rem .4rem; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-top: .1rem; }
+  .milestone-text { font-size: .78rem; line-height: 1.45; color: var(--text); }
+  .milestone-text .val { color: var(--army); font-weight: 600; }
+  .milestone-text .effect-name { color: var(--accent); }
+
+  /* Footer */
+  footer { margin-top: auto; text-align: center; padding: 2rem 1rem; font-size: .7rem; color: var(--muted); }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  @keyframes footer-shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+  .shimmer-text { background-image: linear-gradient(90deg, var(--muted) 0%, var(--accent) 25%, var(--muted) 50%, var(--accent) 75%, var(--muted) 100%); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: footer-shimmer 6s linear infinite; }
+
+  /* Compare button on cards */
+  .compare-btn { position: absolute; top: .35rem; right: .35rem; width: 26px; height: 26px; border-radius: 50%; background: rgba(0,0,0,.65); border: 1.5px solid rgba(255,255,255,.2); color: var(--muted); font-size: .7rem; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 2; transition: all .15s; backdrop-filter: blur(4px); line-height: 1; }
+  .compare-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,0,0,.8); }
+  .compare-btn.selected { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .hcard.cmp-selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 4px 16px rgba(121,192,255,.15); }
+
+  /* Floating compare bar */
+  .compare-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; background: var(--surface); border-top: 1px solid var(--border); padding: .55rem 1rem; display: flex; align-items: center; gap: .65rem; transform: translateY(100%); transition: transform .25s ease; box-shadow: 0 -4px 20px rgba(0,0,0,.4); }
+  .compare-bar.visible { transform: translateY(0); }
+  .compare-bar-heroes { display: flex; gap: .5rem; flex: 1; min-width: 0; overflow-x: auto; }
+  .compare-bar-hero { display: flex; align-items: center; gap: .35rem; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: .25rem .45rem .25rem .25rem; flex-shrink: 0; }
+  .compare-bar-hero img { width: 32px; height: 32px; border-radius: 6px; object-fit: cover; }
+  .compare-bar-hero .cbh-name { font-size: .72rem; font-weight: 600; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .compare-bar-hero .cbh-remove { background: none; border: none; color: var(--muted); cursor: pointer; font-size: .85rem; padding: 0 .15rem; line-height: 1; }
+  .compare-bar-hero .cbh-remove:hover { color: #f85149; }
+  .compare-bar-actions { display: flex; gap: .4rem; flex-shrink: 0; }
+  .compare-bar-btn { border: none; border-radius: 6px; padding: .4rem .85rem; font-size: .75rem; font-weight: 600; cursor: pointer; transition: all .15s; }
+  .compare-bar-btn.primary { background: var(--accent); color: var(--bg); }
+  .compare-bar-btn.primary:disabled { opacity: .4; cursor: not-allowed; }
+  .compare-bar-btn.primary:not(:disabled):hover { filter: brightness(1.15); }
+  .compare-bar-btn.secondary { background: var(--card); color: var(--muted); border: 1px solid var(--border); }
+  .compare-bar-btn.secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Compare modal */
+  .cmp-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.78); z-index: 1100; display: flex; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(2px); }
+  .cmp-overlay.hidden { display: none; }
+  .cmp-modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; max-width: 960px; width: 100%; max-height: 88vh; overflow-y: auto; }
+  .cmp-modal-header { display: flex; align-items: center; justify-content: space-between; padding: .75rem 1.25rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--surface); z-index: 1; border-radius: 12px 12px 0 0; }
+  .cmp-modal-title { font-size: .95rem; font-weight: 700; }
+  .cmp-modal-close { background: none; border: none; color: var(--muted); font-size: 1.5rem; cursor: pointer; padding: .2rem .5rem; line-height: 1; }
+  .cmp-modal-close:hover { color: var(--text); }
+  .cmp-modal-body { padding: 1rem 1.25rem; }
+
+  /* Compare grid — columns per hero */
+  .cmp-grid { display: grid; gap: 1rem; }
+  .cmp-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .cmp-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  /* Hero column header */
+  .cmp-hero-header { display: flex; align-items: center; gap: .5rem; padding: .6rem .75rem; background: var(--card); border: 1px solid var(--border); border-radius: 8px; }
+  .cmp-hero-header img { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
+  .cmp-hero-header img.army { border: 2px solid var(--army); }
+  .cmp-hero-header img.navy { border: 2px solid var(--navy); }
+  .cmp-hero-header img.air { border: 2px solid var(--air); }
+  .cmp-hero-name-col { flex: 1; min-width: 0; }
+  .cmp-hero-name-col .name { font-size: .85rem; font-weight: 700; }
+  .cmp-hero-name-col .badges { display: flex; gap: .25rem; margin-top: .15rem; flex-wrap: wrap; }
+
+  /* Section rows */
+  .cmp-section-title { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); padding: .6rem 0 .3rem; border-bottom: 1px solid var(--border); margin-top: .75rem; grid-column: 1 / -1; }
+  .cmp-skill-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: .6rem .7rem; min-height: 60px; }
+  .cmp-skill-title { font-size: .7rem; font-weight: 700; color: var(--accent); margin-bottom: .25rem; }
+  .cmp-skill-desc { font-size: .78rem; line-height: 1.5; color: var(--text); }
+  .cmp-no-skill { color: var(--muted); font-size: .78rem; font-style: italic; }
+  .cmp-exclusive-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: .6rem .7rem; }
+  .cmp-exclusive-name { font-size: .82rem; font-weight: 700; color: var(--purple); margin-bottom: .3rem; }
+  .cmp-exclusive-desc { font-size: .78rem; line-height: 1.45; color: var(--text); margin-bottom: .5rem; }
+  .cmp-milestone { display: flex; gap: .4rem; align-items: flex-start; margin-bottom: .35rem; }
+  .cmp-milestone .milestone-badge { font-size: .55rem; padding: .1rem .3rem; }
+  .cmp-milestone .milestone-text { font-size: .72rem; line-height: 1.4; }
+
+  /* Effect matrix */
+  .cmp-effect-matrix { grid-column: 1 / -1; }
+  .cmp-effect-row { display: flex; align-items: center; padding: .3rem .5rem; border-radius: 6px; gap: .5rem; }
+  .cmp-effect-row:nth-child(odd) { background: rgba(255,255,255,.02); }
+  .cmp-effect-row.shared { background: rgba(121,192,255,.06); }
+  .cmp-effect-label { font-size: .75rem; flex: 1; min-width: 0; }
+  .cmp-effect-dots { display: flex; gap: .35rem; }
+  .cmp-effect-dot { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .6rem; }
+  .cmp-effect-dot.has { background: rgba(63,185,80,.2); color: var(--army); }
+  .cmp-effect-dot.no { background: rgba(255,255,255,.04); color: var(--muted); opacity: .4; }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .hero-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .hero-grid { grid-template-columns: repeat(3, 1fr); }
+    .hcard-name { font-size: .75rem; }
+    .modal { max-height: 90vh; }
+  }
+  @media (max-width: 600px) {
+    .cmp-grid.cols-2, .cmp-grid.cols-3 { grid-template-columns: 1fr; }
+    .cmp-section-title { grid-column: 1; }
+    .cmp-effect-matrix { grid-column: 1; }
+    .cmp-modal { max-height: 92vh; }
+    .compare-bar-hero .cbh-name { max-width: 55px; }
+  }
+  @media (max-width: 480px) {
+    .hero-grid { grid-template-columns: repeat(2, 1fr); gap: .5rem; }
+    .hcard-tag { font-size: .5rem; }
+    .hcard-name { font-size: .7rem; }
+    .modal-hero-img { width: 48px; height: 48px; }
+    .modal-hero-name { font-size: .95rem; }
+    .compare-btn { width: 24px; height: 24px; font-size: .6rem; }
+  }
+  /* Beta nav popover */
+  .bnp-wrap { position:relative; display:inline-flex; }
+  #bnpBtn { background:none; border:1px solid var(--border,#30363d); border-radius:8px; padding:.3rem .45rem; color:var(--muted,#8b949e); cursor:pointer; display:flex; align-items:center; }
+  #bnpBtn:hover { border-color:var(--accent,#79c0ff); color:var(--accent,#79c0ff); }
+  #bnpPop { display:none; position:absolute; top:calc(100% + 6px); left:0; background:var(--surface,#161b22); border:1px solid var(--border,#30363d); border-radius:10px; padding:.4rem; z-index:500; min-width:168px; box-shadow:0 8px 24px rgba(0,0,0,.5); }
+  #bnpPop.open { display:block; }
+  .bnp-link { display:block; padding:.35rem .6rem; font-size:.78rem; color:var(--muted,#8b949e); text-decoration:none; border-radius:6px; white-space:nowrap; }
+  .bnp-link:hover { background:rgba(121,192,255,.08); color:var(--text,#e6edf3); }
+  .bnp-link.bnp-cur { color:var(--accent,#79c0ff); font-weight:600; pointer-events:none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a href="https://mathomhouse.github.io" class="home-btn" title="Home">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L8.354 1.146z"/></svg>
+  </a>
+  <div class="bnp-wrap">
+    <button id="bnpBtn" title="All pages" onclick="document.getElementById('bnpPop').classList.toggle('open')"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3A1.5 1.5 0 0 1 15 10.5v3A1.5 1.5 0 0 1 13.5 15h-3A1.5 1.5 0 0 1 9 13.5v-3z"/></svg></button>
+    <div id="bnpPop">
+    <a href="battle-report.html" class="bnp-link">Battle Reports</a>
+    <a href="decor-index.html" class="bnp-link">Decor Index</a>
+    <a href="bases.html" class="bnp-link">Bases</a>
+    <a href="heroes.html" class="bnp-link bnp-cur">Heroes</a>
+    <a href="treasury.html" class="bnp-link">Treasury</a>
+    <a href="ssc-map.html" class="bnp-link">UD Sector Map</a>
+    <a href="great-offers-preview.html" class="bnp-link">Great Offers</a>
+    <a href="easter-wishing.html" class="bnp-link">Easter Wishing</a>
+    <a href="armory-report.html" class="bnp-link">Armory Report</a>
+    </div>
+  </div>
+  <h1>Heroes Database</h1>
+  <span class="hero-count" id="heroCount">0</span>
+</div>
+
+<div class="search-bar">
+  <input id="searchInput" type="text" placeholder="Search heroes, skills, effects...">
+</div>
+
+<div class="filter-row" id="typeFilters"></div>
+<div class="filter-row" id="effectFilters"></div>
+
+<div id="statusEl" class="status"></div>
+
+<div id="content">
+  <div class="section-header ssr" id="ssrHeader" onclick="toggleSection('ssr')">
+    <span class="chevron" id="ssrChevron">&#9660;</span>
+    <span>SSR Heroes</span>
+    <span class="badge" id="ssrCount">0</span>
+  </div>
+  <div class="hero-grid" id="ssrGrid"></div>
+
+  <div class="section-header sr" id="srHeader" onclick="toggleSection('sr')">
+    <span class="chevron collapsed" id="srChevron">&#9660;</span>
+    <span>SR Heroes</span>
+    <span class="badge" id="srCount">0</span>
+  </div>
+  <div class="hero-grid hidden" id="srGrid"></div>
+
+  <div class="section-header r" id="rHeader" onclick="toggleSection('r')">
+    <span class="chevron collapsed" id="rChevron">&#9660;</span>
+    <span>R Heroes</span>
+    <span class="badge" id="rCount">0</span>
+  </div>
+  <div class="hero-grid hidden" id="rGrid"></div>
+</div>
+
+<div class="effect-tooltip" id="effectTooltip"></div>
+<div class="modal-overlay hidden" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<div class="compare-bar" id="compareBar">
+  <div class="compare-bar-heroes" id="compareBarHeroes"></div>
+  <div class="compare-bar-actions">
+    <button class="compare-bar-btn primary" id="compareBtn" disabled onclick="openCompare()">Compare</button>
+    <button class="compare-bar-btn secondary" onclick="clearCompare()">Clear</button>
+  </div>
+</div>
+
+<div class="cmp-overlay hidden" id="cmpOverlay" onclick="if(event.target===this)closeCompare()">
+  <div class="cmp-modal" id="cmpModal"></div>
+</div>
+
+<footer>
+  <div style="margin-bottom:.3rem"><a href="https://mathomhouse.github.io">2864tw.com</a></div>
+  <a href="https://github.com/texnottexas/landing-page" class="shimmer-text">Brought to you by supporters of the fk boats movement</a>
+  <div style="margin-top:.4rem"><a href="#" onclick="event.preventDefault();location.reload(true)" style="color:var(--muted);font-size:.6rem">Refresh Page</a></div>
+</footer>
+
+<script>
+/* All data rendered on this page is our own static JSON extracted from the game client.
+   No user input is ever rendered as HTML. innerHTML usage is safe as we control all the data. */
+
+var ASSET_BASE = 'https://raw.githubusercontent.com/texnottexas/landing-page/main/';
+
+var EFFECT_NAMES = {
+  5:'Indestructible',6:'Strike',8:'Chaos',9:'Silence',10:'Heavy Armor',
+  11:'Vulnerable',12:'Debilitation',13:'HP Boost',14:'Attack Enhancement',
+  15:'Rage',16:'Disarm',18:'Abnormal Status',19:'Hostile',20:'Wild Instinct',
+  21:'Domination',46:'Ignition',47:'Splash Damage',49:'Resistance',50:'Support',
+  52:'Combo Attack',56:'Mighty Charge',62:'Resistance',69:'Silent Precision',
+  70:'Damage Reduction Shield',71:'Decoy',72:'Magnetic Pulse',73:'Status Damage (DOT)',
+  77:'Light Armor',78:'Vitality',85:'Block',88:'Taunt',89:'Meditation',92:'Concentration'
+};
+
+var INTERESTING_EFFECTS = new Set([
+  'Ignition','Magnetic Pulse','Combo Attack','Indestructible','Splash Damage',
+  'Hostile','Silence','Chaos','Rage','Vulnerable','Debilitation','Heavy Armor',
+  'Light Armor','Taunt','Decoy','Mighty Charge','Wild Instinct','Domination',
+  'Vitality','Block','Meditation','Concentration','Silent Precision',
+  'Damage Reduction Shield','Status Damage (DOT)','Disarm','Strike','Abnormal Status'
+]);
+
+var TYPE_CLASS = {'Army':'army','Navy':'navy','Air Force':'air'};
+var TYPE_SHORT = {'Army':'Army','Navy':'Navy','Air Force':'Air'};
+var DECOR_HEROES = new Set([119, 143, 146, 150, 152, 155, 158, 163, 164]);
+
+var EFFECT_DESCRIPTIONS = {
+  'Indestructible':'Prevents your units from being eliminated for the duration. Units at 0 HP survive with 1 HP.',
+  'Strike':'Increases critical hit rate and critical damage for your units.',
+  'Chaos':'Causes an enemy unit to attack its own allies for the duration.',
+  'Silence':'Prevents an enemy hero from using their active/rage skill for the duration.',
+  'Heavy Armor':'Reduces damage taken. Each stack absorbs a fixed percentage of incoming damage, then is consumed.',
+  'Vulnerable':'Increases damage taken by the affected enemy unit. Stacks increase the effect.',
+  'Debilitation':'Reduces the attack power of affected enemy units for the duration.',
+  'HP Boost':'Increases the maximum HP of your units for the duration.',
+  'Attack Enhancement':'Increases the attack power of your units for the duration.',
+  'Rage':'Accumulated through attacks. When enough Rage points are gathered, the hero unleashes a powerful rage skill.',
+  'Disarm':'Prevents the affected unit from performing regular attacks for the duration.',
+  'Abnormal Status':'A category that includes debuffs like Vulnerable, Debilitation, Silence, etc. Some skills deal bonus damage to targets with any Abnormal Status.',
+  'Hostile':'Triggers a counterattack when the unit performs a regular attack. Consumes stacks on use.',
+  'Wild Instinct':'Increases damage dealt and provides other combat bonuses.',
+  'Domination':'Increase the HP and attack attributes for your units. When multiple Domination effects stack, only the one with the stronger effect will be effective. It applies regardless of whether the hero is deployed or not. Applies to units in battle.',
+  'Ignition':'A damage-over-time (DOT) effect. At the end of each turn, the affected unit takes Ignition damage based on the stack percentage. Can be detonated by certain skills.',
+  'Splash Damage':'Deals additional damage to units adjacent to or in the same column/row as the primary target.',
+  'Resistance':'Blocks or reduces the next incoming debuff or negative effect.',
+  'Support':'Units in the back row share damage taken by units in the same column, reducing frontline casualties.',
+  'Combo Attack':'After a regular attack, triggers an additional follow-up attack dealing bonus damage.',
+  'Mighty Charge':'Stacking buff that increases both Attack Enhancement and Decreased Damage Taken per stack.',
+  'Silent Precision':'Increases the chance of applying Silence to enemy heroes.',
+  'Damage Reduction Shield':'A category for effects like Heavy Armor and Light Armor. Some skills scale with the number of different shield types active.',
+  'Decoy':'Absorbs one incoming attack per stack, reducing the damage taken. Consumed on hit.',
+  'Magnetic Pulse':'A stacking DOT effect. At the end of each turn, all stacks are consumed and the target takes cumulative damage. Can be detonated by certain heroes for burst damage.',
+  'Status Damage (DOT)':'A category for damage-over-time effects like Ignition and Magnetic Pulse. Some skills detonate all DOT effects at once.',
+  'Light Armor':'Reduces damage taken. Each stack absorbs a percentage of incoming damage, then is consumed. Counts as a Damage Reduction Shield.',
+  'Vitality':'Heals a percentage of max HP at the start of each round for the duration.',
+  'Block':'Chance to completely negate an incoming attack, taking zero damage.',
+  'Taunt':'Forces enemies to target the unit with Taunt. Reduces damage taken when attacked and can trigger countereffects.',
+  'Meditation':'Passively increases hero stats when the hero is in your roster, even outside of battle.',
+  'Concentration':'Increases damage dealt with each attack, stacking up to a cap. Resets if the unit is hit.'
+};
+
+var allHeroes = [], ssrHeroes = [], srHeroes = [], rHeroes = [];
+var activeTypeFilter = 'All';
+var activeEffectFilters = new Set();
+var searchQuery = '';
+var allEffectsList = [];
+var effectExpanded = false;
+var VISIBLE_EFFECTS = 8;
+var sortedEffectNames = null;
+
+function loadData() {
+  document.getElementById('statusEl').textContent = 'Loading heroes...';
+  fetch('https://raw.githubusercontent.com/texnottexas/landing-page/main/data/all-heroes.json')
+    .then(function(r) { if (!r.ok) throw new Error('Failed to load'); return r.json(); })
+    .then(function(data) {
+      allHeroes = data;
+      ssrHeroes = data.filter(function(h) { return h.qualityName === 'Gold'; });
+      srHeroes = data.filter(function(h) { return h.qualityName === 'Purple'; });
+      rHeroes = data.filter(function(h) { return h.qualityName === 'Blue'; });
+      document.getElementById('statusEl').textContent = '';
+      buildTypeFilters();
+      buildEffectFilters();
+      renderAll();
+    })
+    .catch(function(e) {
+      document.getElementById('statusEl').textContent = 'Error loading hero data: ' + e.message;
+      document.getElementById('statusEl').className = 'status error';
+    });
+}
+
+function buildTypeFilters() {
+  var container = document.getElementById('typeFilters');
+  var types = [
+    {label:'All Types', value:'All', cls:'type-all'},
+    {label:'Army', value:'Army', cls:'type-army'},
+    {label:'Navy', value:'Navy', cls:'type-navy'},
+    {label:'Air Force', value:'Air Force', cls:'type-air'},
+    {label:'Decor', value:'Decor', cls:'type-decor'}
+  ];
+  var html = '<span class="filter-label">Type</span>';
+  types.forEach(function(t) {
+    var active = activeTypeFilter === t.value ? ' active' : '';
+    html += '<span class="fpill ' + t.cls + active + '" onclick="setTypeFilter(\'' + t.value + '\')">' + t.label + '</span>';
+  });
+  container.innerHTML = html;
+}
+
+function buildEffectFilters() {
+  var freq = {};
+  allHeroes.forEach(function(h) {
+    (h.effectTags || []).forEach(function(tag) {
+      freq[tag] = (freq[tag] || 0) + 1;
+    });
+  });
+  var PRIORITY_TOP = ['Attack Enhancement', 'HP Boost', 'Indestructible'];
+  var PRIORITY_MID = ['Debilitation', 'Ignition', 'Magnetic Pulse', 'Vulnerable'];
+  var topSet = new Set(PRIORITY_TOP);
+  var midSet = new Set(PRIORITY_MID);
+  var rest = Object.keys(freq).filter(function(e) { return !topSet.has(e) && !midSet.has(e); }).sort();
+  var midFiltered = PRIORITY_MID.filter(function(e) { return freq[e]; });
+  var topFiltered = PRIORITY_TOP.filter(function(e) { return freq[e]; });
+  allEffectsList = topFiltered.concat(midFiltered).concat(rest);
+  renderEffectFilters();
+}
+
+function renderEffectFilters() {
+  var container = document.getElementById('effectFilters');
+  if (allEffectsList.length === 0) { container.innerHTML = ''; return; }
+  var html = '<span class="filter-label">Effects</span>';
+  var visible = effectExpanded ? allEffectsList : allEffectsList.slice(0, VISIBLE_EFFECTS);
+  visible.forEach(function(eff) {
+    var active = activeEffectFilters.has(eff) ? ' active' : '';
+    var escaped = eff.replace(/'/g, "\\'");
+    html += '<span class="fpill effect' + active + '" onclick="toggleEffect(\'' + escaped + '\')">' + eff + '</span>';
+  });
+  if (allEffectsList.length > VISIBLE_EFFECTS) {
+    if (effectExpanded) {
+      html += '<span class="fpill more-toggle" onclick="toggleEffectExpand()">Show less</span>';
+    } else {
+      var remaining = allEffectsList.length - VISIBLE_EFFECTS;
+      html += '<span class="fpill more-toggle" onclick="toggleEffectExpand()">+' + remaining + ' more</span>';
+    }
+  }
+  container.innerHTML = html;
+}
+
+function setTypeFilter(type) {
+  activeTypeFilter = type;
+  buildTypeFilters();
+  renderAll();
+}
+
+function toggleEffect(eff) {
+  if (activeEffectFilters.has(eff)) {
+    activeEffectFilters.delete(eff);
+  } else {
+    activeEffectFilters.add(eff);
+  }
+  renderEffectFilters();
+  renderAll();
+}
+
+function toggleEffectExpand() {
+  effectExpanded = !effectExpanded;
+  renderEffectFilters();
+}
+
+function filterHeroes(heroes) {
+  return heroes.filter(function(h) {
+    if (activeTypeFilter === 'Decor') { if (!DECOR_HEROES.has(h.heroId)) return false; }
+    else if (activeTypeFilter !== 'All' && h.typeName !== activeTypeFilter) return false;
+    if (activeEffectFilters.size > 0) {
+      var tags = new Set(h.effectTags || []);
+      var allMatch = Array.from(activeEffectFilters).every(function(eff) { return tags.has(eff); });
+      if (!allMatch) return false;
+    }
+    if (searchQuery) {
+      var q = searchQuery.toLowerCase();
+      var searchable = [
+        h.displayName,
+        h.skillName,
+        h.typeName,
+        (h.effectTags || []).join(' ')
+      ];
+      (h.skills || []).forEach(function(s) {
+        searchable.push(s.description || '');
+        searchable.push(s.title || '');
+      });
+      if (h.exclusiveSkill) {
+        searchable.push(h.exclusiveSkill.name || '');
+        searchable.push(h.exclusiveSkill.description || '');
+        (h.exclusiveSkill.milestones || []).forEach(function(m) {
+          searchable.push(m.text || '');
+        });
+      }
+      var joined = searchable.join(' ').toLowerCase();
+      if (joined.indexOf(q) === -1) return false;
+    }
+    return true;
+  });
+}
+
+function getCardTags(hero) {
+  var tags = hero.effectTags || [];
+  if (tags.length === 0) return [];
+  var interesting = tags.filter(function(t) { return INTERESTING_EFFECTS.has(t); });
+  var generic = tags.filter(function(t) { return !INTERESTING_EFFECTS.has(t); });
+  return interesting.concat(generic).slice(0, 2);
+}
+
+function escapeAttr(s) {
+  return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function renderCard(hero) {
+  var tc = TYPE_CLASS[hero.typeName] || '';
+  var tags = getCardTags(hero);
+  var imgSrc = hero.iconLarge || hero.iconSmall || '';
+  var tagsHtml = '';
+  if (tags.length) {
+    tagsHtml = '<div class="hcard-tags">';
+    tags.forEach(function(t) { tagsHtml += '<span class="hcard-tag">' + t + '</span>'; });
+    tagsHtml += '</div>';
+  }
+  var imgHtml = imgSrc
+    ? '<img class="hcard-img" src="' + escapeAttr(imgSrc) + '" alt="' + escapeAttr(hero.displayName) + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
+      + '<div class="hcard-placeholder" style="display:none">?</div>'
+    : '<div class="hcard-placeholder">?</div>';
+  var typeLabel = TYPE_SHORT[hero.typeName] || '';
+  var isDecor = DECOR_HEROES.has(hero.heroId);
+  var pills = '';
+  if (typeLabel) pills += '<span class="hcard-type-pill ' + tc + '">' + typeLabel + '</span>';
+  if (isDecor) pills += '<span class="hcard-type-pill decor">Decor</span>';
+  var cmpSelected = compareSet.indexOf(hero.heroId) !== -1;
+  var cmpCls = cmpSelected ? ' cmp-selected' : '';
+  var cmpBtnCls = cmpSelected ? ' selected' : '';
+  var cmpIcon = cmpSelected ? '✓' : '⚔';
+  return '<div class="hcard ' + tc + cmpCls + '" onclick="openModal(' + hero.heroId + ')">'
+    + '<div class="compare-btn' + cmpBtnCls + '" onclick="toggleCompare(' + hero.heroId + ',event)" title="Compare">' + cmpIcon + '</div>'
+    + imgHtml
+    + tagsHtml
+    + '<div class="hcard-overlay"><div class="hcard-name">' + hero.displayName + '</div>'
+    + pills
+    + '</div>'
+    + '</div>';
+}
+
+function renderGrid(heroes, gridId, emptyMsg) {
+  var grid = document.getElementById(gridId);
+  grid.innerHTML = heroes.length
+    ? heroes.map(renderCard).join('')
+    : '<div class="no-results">' + emptyMsg + '</div>';
+}
+
+function renderAll() {
+  var filteredSSR = filterHeroes(ssrHeroes);
+  var filteredSR = filterHeroes(srHeroes);
+  var filteredR = filterHeroes(rHeroes);
+  renderGrid(filteredSSR, 'ssrGrid', 'No SSR heroes match your filters');
+  renderGrid(filteredSR, 'srGrid', 'No SR heroes match your filters');
+  renderGrid(filteredR, 'rGrid', 'No R heroes match your filters');
+  document.getElementById('ssrCount').textContent = filteredSSR.length;
+  document.getElementById('srCount').textContent = filteredSR.length;
+  document.getElementById('rCount').textContent = filteredR.length;
+  document.getElementById('heroCount').textContent = filteredSSR.length + filteredSR.length + filteredR.length;
+}
+
+function getSortedEffectNames() {
+  if (!sortedEffectNames) {
+    sortedEffectNames = Object.values(EFFECT_NAMES);
+    sortedEffectNames.sort(function(a, b) { return b.length - a.length; });
+  }
+  return sortedEffectNames;
+}
+
+function highlightDescription(desc) {
+  if (!desc) return '';
+  var text = desc.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  text = text.replace(/(\d+\.?\d*%|\d+-\d+%?|\{\d+\})/g, '<span class="val">$1</span>');
+  text = text.replace(/(?<!["\d>])(\d+\.?\d*)(?![%\d<\-])/g, '<span class="val">$1</span>');
+  getSortedEffectNames().forEach(function(name) {
+    var escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    var attrName = name.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+    text = text.replace(new RegExp('\\b(' + escaped + ')\\b', 'g'),
+      '<span class="effect-name" onclick="event.stopPropagation();showEffectTip(this,\'' + attrName + '\')">$1</span>');
+  });
+  return text;
+}
+
+function renderSkillSection(hero) {
+  // Icon files use skill_{skillId}.png — try 10000+heroId, fallback 2010000+heroId via onerror
+  var skillBase = ASSET_BASE + 'assets/skill-icons/skill_';
+  var primaryIcon = skillBase + (10000 + hero.heroId) + '.png';
+  var fallbackIcon = skillBase + (2010000 + hero.heroId) + '.png';
+  var skillIconUrl = hero.heroId ? primaryIcon : '';
+  var html = '<div class="skill-section">';
+  html += '<div class="skill-section-title">Native Skill</div>';
+  html += '<div class="skill-header">';
+  if (skillIconUrl) {
+    html += '<img class="skill-icon native" src="' + escapeAttr(skillIconUrl) + '" alt="" onerror="this.src=\'' + escapeAttr(fallbackIcon) + '\';this.onerror=function(){this.style.display=\'none\'}">';
+  }
+  html += '<div class="skill-info"><div class="skill-name">' + (hero.skillName || 'Unknown') + '</div></div></div>';
+  (hero.skills || []).forEach(function(s) {
+    html += '<div class="sub-skill">';
+    html += '<div class="sub-skill-title">' + (s.title || '') + '</div>';
+    html += '<div class="sub-skill-desc">' + highlightDescription(s.description) + '</div>';
+    html += '</div>';
+  });
+  var seen = {};
+  var effectSet = (hero.skills || []).reduce(function(acc, s) {
+    (s.effects || []).forEach(function(e) {
+      if (!seen[e.name]) { seen[e.name] = true; acc.push(e.name); }
+    });
+    return acc;
+  }, []);
+  if (effectSet.length) {
+    html += '<div class="effect-tags-row">';
+    effectSet.forEach(function(name) {
+      html += '<span class="effect-pill" onclick="event.stopPropagation();showEffectTip(this,\'' + escapeAttr(name) + '\')">' + name + '</span>';
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function renderExclusiveSection(hero) {
+  var exc = hero.exclusiveSkill;
+  if (!exc) return '';
+  var iconUrl = exc.iconFile
+    ? ASSET_BASE + 'assets/exclusive-skill-icons/' + exc.iconFile
+    : '';
+  var html = '<div class="skill-section exclusive-section">';
+  html += '<div class="skill-section-title" style="color:var(--purple)">Exclusive Skill</div>';
+  html += '<div class="skill-header">';
+  if (iconUrl) {
+    html += '<img class="skill-icon exclusive" src="' + escapeAttr(iconUrl) + '" alt="" onerror="this.style.display=\'none\'">';
+  }
+  html += '<div class="skill-info"><div class="skill-name">' + (exc.name || '') + '</div>';
+  html += '<div class="skill-label">Exclusive Skill &middot; Max Lv.' + (exc.maxLevel || 10) + '</div></div></div>';
+  if (exc.description) {
+    html += '<div class="exclusive-desc">' + highlightDescription(exc.description) + '</div>';
+  }
+  if (exc.milestones && exc.milestones.length) {
+    html += '<div class="milestones">';
+    exc.milestones.forEach(function(m) {
+      html += '<div class="milestone">';
+      html += '<span class="milestone-badge">Lv.' + m.level + '</span>';
+      html += '<span class="milestone-text">' + highlightDescription(m.text) + '</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function openModal(heroId) {
+  var hero = allHeroes.find(function(h) { return h.heroId === heroId; });
+  if (!hero) return;
+  var tc = TYPE_CLASS[hero.typeName] || '';
+  var rarity = {Gold:'SSR',Purple:'SR',Blue:'R'}[hero.qualityName] || 'SSR';
+  var rarityCls = {Gold:'ssr',Purple:'sr',Blue:'r'}[hero.qualityName] || 'ssr';
+  var imgSrc = hero.iconSmall || hero.iconLarge || '';
+  var html = '<div class="modal-header">';
+  if (imgSrc) {
+    html += '<img class="modal-hero-img ' + tc + '" src="' + escapeAttr(imgSrc) + '" alt="" onerror="this.style.display=\'none\'">';
+  }
+  html += '<div class="modal-hero-info">';
+  html += '<div class="modal-hero-name">' + hero.displayName + '</div>';
+  html += '<div class="modal-hero-meta">';
+  html += '<span class="modal-stars">★★★★★</span>';
+  html += '<span class="modal-type-badge ' + rarityCls + '">' + rarity + '</span>';
+  html += '<span class="modal-type-badge ' + tc + '">' + hero.typeName + '</span>';
+  if (DECOR_HEROES.has(hero.heroId)) html += '<span class="modal-type-badge decor">Decor</span>';
+  if (hero.releaseDate) {
+    var rd = new Date(hero.releaseDate + 'T00:00:00');
+    var mon = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][rd.getMonth()];
+    html += '<span class="modal-release">Released ' + mon + ' ' + rd.getDate() + ', ' + rd.getFullYear() + '</span>';
+  }
+  html += '</div></div>';
+  html += '<button class="modal-close" onclick="closeModal()">&times;</button>';
+  html += '</div>';
+  html += '<div class="modal-body">';
+  if (hero.bio) {
+    html += '<div class="hero-bio">' + hero.bio.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
+  }
+  html += renderSkillSection(hero);
+  html += renderExclusiveSection(hero);
+  html += '</div>';
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modalOverlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.add('hidden');
+  document.body.style.overflow = '';
+  var tip = document.getElementById('effectTooltip');
+  tip.classList.remove('visible');
+  tip._currentEl = null;
+}
+
+function showEffectTip(el, name) {
+  var tip = document.getElementById('effectTooltip');
+  var desc = EFFECT_DESCRIPTIONS[name];
+  if (!desc) return;
+
+  // If clicking same element, toggle off
+  if (tip.classList.contains('visible') && tip._currentEl === el) {
+    tip.classList.remove('visible');
+    tip._currentEl = null;
+    return;
+  }
+
+  tip.innerHTML = '<div class="tip-title">' + name + '</div>' + desc;
+  tip.classList.add('visible');
+  tip._currentEl = el;
+
+  // Position: above the element, clamped to viewport
+  var rect = el.getBoundingClientRect();
+  tip.style.left = '0';
+  tip.style.top = '0';
+  var tipRect = tip.getBoundingClientRect();
+  var tipW = tipRect.width;
+  var tipH = tipRect.height;
+
+  var left = rect.left + rect.width / 2 - tipW / 2;
+  var top = rect.top - tipH - 8;
+
+  // If above overflows, put below
+  if (top < 8) top = rect.bottom + 8;
+  // Clamp horizontal
+  if (left < 8) left = 8;
+  if (left + tipW > window.innerWidth - 8) left = window.innerWidth - tipW - 8;
+
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+
+function toggleSection(key) {
+  document.getElementById(key + 'Grid').classList.toggle('hidden');
+  document.getElementById(key + 'Chevron').classList.toggle('collapsed');
+}
+
+document.getElementById('searchInput').addEventListener('input', function(e) {
+  searchQuery = e.target.value.trim();
+  renderAll();
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.effect-pill') && !e.target.closest('.effect-name') && !e.target.closest('.effect-tooltip')) {
+    var tip = document.getElementById('effectTooltip');
+    tip.classList.remove('visible');
+    tip._currentEl = null;
+  }
+});
+
+document.querySelector('.modal').addEventListener('scroll', function() {
+  var tip = document.getElementById('effectTooltip');
+  tip.classList.remove('visible');
+  tip._currentEl = null;
+});
+
+/* ── Hero Comparison ── */
+var compareSet = []; // array of heroIds, max 3
+
+function toggleCompare(heroId, event) {
+  event.stopPropagation();
+  var idx = compareSet.indexOf(heroId);
+  if (idx !== -1) {
+    compareSet.splice(idx, 1);
+  } else {
+    if (compareSet.length >= 3) return; // max 3
+    compareSet.push(heroId);
+  }
+  renderCompareBar();
+  renderAll(); // re-render cards to update selected state
+}
+
+function removeCompare(heroId) {
+  var idx = compareSet.indexOf(heroId);
+  if (idx !== -1) compareSet.splice(idx, 1);
+  renderCompareBar();
+  renderAll();
+}
+
+function clearCompare() {
+  compareSet = [];
+  renderCompareBar();
+  renderAll();
+}
+
+function renderCompareBar() {
+  var bar = document.getElementById('compareBar');
+  var heroesEl = document.getElementById('compareBarHeroes');
+  var btn = document.getElementById('compareBtn');
+  if (compareSet.length === 0) {
+    bar.classList.remove('visible');
+    return;
+  }
+  bar.classList.add('visible');
+  btn.disabled = compareSet.length < 2;
+  /* All data rendered here is our own static JSON — no user input is involved */
+  var html = '';
+  compareSet.forEach(function(hid) {
+    var hero = allHeroes.find(function(h) { return h.heroId === hid; });
+    if (!hero) return;
+    var imgSrc = hero.iconSmall || hero.iconLarge || '';
+    var imgTag = imgSrc ? '<img src="' + escapeAttr(imgSrc) + '" alt="">' : '';
+    html += '<div class="compare-bar-hero">'
+      + imgTag
+      + '<span class="cbh-name">' + hero.displayName + '</span>'
+      + '<button class="cbh-remove" onclick="removeCompare(' + hid + ')" title="Remove">&times;</button>'
+      + '</div>';
+  });
+  heroesEl.innerHTML = html;
+}
+
+function openCompare() {
+  if (compareSet.length < 2) return;
+  var heroes = compareSet.map(function(hid) {
+    return allHeroes.find(function(h) { return h.heroId === hid; });
+  }).filter(Boolean);
+  if (heroes.length < 2) return;
+  var colsCls = heroes.length === 2 ? 'cols-2' : 'cols-3';
+
+  /* All data rendered in this modal is our own static JSON extracted from the game client.
+     No user input is ever rendered as HTML. innerHTML usage is safe as we control all the data. */
+  var html = '<div class="cmp-modal-header">';
+  html += '<span class="cmp-modal-title">Hero Comparison</span>';
+  html += '<button class="cmp-modal-close" onclick="closeCompare()">&times;</button>';
+  html += '</div>';
+  html += '<div class="cmp-modal-body">';
+  html += '<div class="cmp-grid ' + colsCls + '">';
+
+  // Hero headers
+  heroes.forEach(function(hero) {
+    var tc = TYPE_CLASS[hero.typeName] || '';
+    var rarity = {Gold:'SSR',Purple:'SR',Blue:'R'}[hero.qualityName] || 'SSR';
+    var rarityCls = {Gold:'ssr',Purple:'sr',Blue:'r'}[hero.qualityName] || 'ssr';
+    var imgSrc = hero.iconSmall || hero.iconLarge || '';
+    var imgTag = imgSrc ? '<img class="' + tc + '" src="' + escapeAttr(imgSrc) + '" alt="" onerror="this.style.display=\'none\'">' : '';
+    html += '<div class="cmp-hero-header">'
+      + imgTag
+      + '<div class="cmp-hero-name-col"><div class="name">' + hero.displayName + '</div>'
+      + '<div class="badges">'
+      + '<span class="modal-type-badge ' + rarityCls + '">' + rarity + '</span>'
+      + '<span class="modal-type-badge ' + tc + '">' + hero.typeName + '</span>'
+      + '</div></div></div>';
+  });
+
+  // Native skill comparison by skill title categories
+  var SKILL_TITLES = ['Opening Skill', 'Preparation Skill', 'Active Skill', 'Passive Skill', 'Rage Skill'];
+
+  html += '<div class="cmp-section-title">Native Skills</div>';
+
+  SKILL_TITLES.forEach(function(title) {
+    // Check if any hero has this skill
+    var anyHas = heroes.some(function(h) {
+      return (h.skills || []).some(function(s) { return s.title === title; });
+    });
+    if (!anyHas) return;
+
+    heroes.forEach(function(hero) {
+      var skill = (hero.skills || []).find(function(s) { return s.title === title; });
+      html += '<div class="cmp-skill-card">';
+      if (skill) {
+        html += '<div class="cmp-skill-title">' + title + '</div>';
+        html += '<div class="cmp-skill-desc">' + highlightDescription(skill.description) + '</div>';
+      } else {
+        html += '<div class="cmp-skill-title">' + title + '</div>';
+        html += '<div class="cmp-no-skill">&mdash;</div>';
+      }
+      html += '</div>';
+    });
+  });
+
+  // Effect tag comparison matrix
+  var allEffects = {};
+  heroes.forEach(function(hero, i) {
+    (hero.effectTags || []).forEach(function(tag) {
+      if (!allEffects[tag]) allEffects[tag] = [];
+      if (allEffects[tag].indexOf(i) === -1) allEffects[tag].push(i);
+    });
+  });
+  var effectKeys = Object.keys(allEffects).sort();
+
+  if (effectKeys.length > 0) {
+    html += '<div class="cmp-section-title">Effect Tags</div>';
+    html += '<div class="cmp-effect-matrix">';
+    effectKeys.forEach(function(eff) {
+      var shared = allEffects[eff].length === heroes.length;
+      html += '<div class="cmp-effect-row' + (shared ? ' shared' : '') + '">';
+      html += '<span class="cmp-effect-label">' + eff + '</span>';
+      html += '<span class="cmp-effect-dots">';
+      heroes.forEach(function(hero, i) {
+        var has = allEffects[eff].indexOf(i) !== -1;
+        html += '<span class="cmp-effect-dot ' + (has ? 'has' : 'no') + '">' + (has ? '✓' : '—') + '</span>';
+      });
+      html += '</span></div>';
+    });
+    html += '</div>';
+  }
+
+  // Exclusive skill comparison
+  html += '<div class="cmp-section-title" style="color:var(--purple)">Exclusive Skills</div>';
+  heroes.forEach(function(hero) {
+    var exc = hero.exclusiveSkill;
+    html += '<div class="cmp-exclusive-card">';
+    if (exc) {
+      html += '<div class="cmp-exclusive-name">' + (exc.name || 'Exclusive Skill') + '</div>';
+      if (exc.description) {
+        html += '<div class="cmp-exclusive-desc">' + highlightDescription(exc.description) + '</div>';
+      }
+      if (exc.milestones && exc.milestones.length) {
+        exc.milestones.forEach(function(m) {
+          html += '<div class="cmp-milestone">';
+          html += '<span class="milestone-badge">Lv.' + m.level + '</span>';
+          html += '<span class="milestone-text">' + highlightDescription(m.text) + '</span>';
+          html += '</div>';
+        });
+      }
+    } else {
+      html += '<div class="cmp-no-skill">No exclusive skill</div>';
+    }
+    html += '</div>';
+  });
+
+  html += '</div>'; // cmp-grid
+  html += '</div>'; // cmp-modal-body
+
+  document.getElementById('cmpModal').innerHTML = html;
+  document.getElementById('cmpOverlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCompare() {
+  document.getElementById('cmpOverlay').classList.add('hidden');
+  document.body.style.overflow = '';
+  var tip = document.getElementById('effectTooltip');
+  tip.classList.remove('visible');
+  tip._currentEl = null;
+}
+
+// Close compare modal on Escape
+(function() {
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (!document.getElementById('cmpOverlay').classList.contains('hidden')) {
+        closeCompare();
+      }
+    }
+  });
+})();
+
+loadData();
+</script>
+<script src="feedback-widget.js">  // Beta nav: close on outside click
+  document.addEventListener('click', function(e) {
+    var pop = document.getElementById('bnpPop');
+    if (pop && !pop.contains(e.target) && e.target.id !== 'bnpBtn' && !e.target.closest('#bnpBtn')) pop.classList.remove('open');
+  });
+</script>
+</body>
+</html>

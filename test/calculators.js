@@ -109,8 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
         body: formData
       });
   
-      // NOTE: Discord webhook removed from client-side code for security.
-      // See docs/security-review.md for details on implementing a server-side proxy.
+      // Note: Discord notifications removed - webhook URL must not be exposed in client code.
   
       document.getElementById('modal-feedback-input').value = '';
       document.getElementById('discord-name').value = '';

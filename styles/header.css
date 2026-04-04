@@ -1,27 +1,15 @@
+/* ============================================================ */
+/* Header / Navigation styles                                   */
+/* CSS variables are defined in styles/index.css (single source */
+/* of truth). Dark mode is the default; light = [data-theme="light"] */
+/* ============================================================ */
+
 :root {
-  --bg-color: #f0f2f5;
-  --text-color: #333;
-  --card-bg: white;
-  --header-bg: #2b2d31;
-  --header-border: #1f2023;
-  --accent-color: #0056b3;
-  --nav-bg: #3a3c42;
-  --nav-hover-bg: #4a4c52;
-  --submenu-bg: #45474d;
-  --submenu-border: #555;
+  --header-bg: #111111;
 }
 
-[data-theme="dark"] {
-  --bg-color: #1a1b1e;
-  --text-color: #e4e4e7;
-  --card-bg: #2a2b2e;
-  --header-bg: #111215;
-  --header-border: #0a0a0c;
-  --accent-color: #4d9fff;
-  --nav-bg: #1e1f22;
-  --nav-hover-bg: #2a2b2e;
-  --submenu-bg: #232428;
-  --submenu-border: #3c3d42;
+[data-theme="light"] {
+  --header-bg: #333333;
 }
 
 body {
@@ -30,18 +18,17 @@ body {
   transition: background 0.3s, color 0.3s;
 }
 
-/* Header styling */
+/* Header layout */
 header {
   background-color: var(--header-bg);
   padding: 15px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.4);
   position: sticky;
   top: 0;
   z-index: 1000;
-  border-bottom: 1px solid var(--header-border);
 }
 
 .logo a {
@@ -49,14 +36,11 @@ header {
   text-decoration: none;
   font-size: 28px;
   font-weight: bold;
-  letter-spacing: -0.02em;
-  transition: color 0.3s;
 }
 
 .logo a:hover {
   color: var(--accent-color);
 }
-
 
 .header-right {
   display: flex;
@@ -67,43 +51,38 @@ header {
 nav {
   display: none;
   flex-direction: column;
-  background-color: var(--nav-bg);
+  background-color: #1c2128;
   position: absolute;
   top: 100%;
   left: 0;
   width: fit-content;
   min-width: 150px;
-  border: 1px solid var(--header-border);
-  border-radius: 0 0 8px 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+[data-theme="light"] nav {
+  background-color: #444;
 }
 
 nav a {
-  margin: 0;
-  padding: 10px 20px;
+  margin: 0 15px;
+  padding: 5px;
   text-decoration: none;
-  color: #e0e0e4;
+  color: #e6edf3;
   font-weight: bold;
-  transition: color 0.2s, background-color 0.2s;
+  transition: color 0.3s;
   white-space: nowrap;
 }
 
-nav a:hover {
-  color: var(--accent-color);
-  background-color: var(--nav-hover-bg);
-}
-
-nav a.active {
+nav a.active, nav a:hover {
   color: var(--accent-color);
 }
 
-/* Hamburger menu */
 .menu-toggle {
   flex-direction: column;
   cursor: pointer;
-  gap: 0;
-  padding: 4px;
 }
 
 .bar {
@@ -112,86 +91,62 @@ nav a.active {
   background-color: white;
   margin: 4px 0;
   border-radius: 3px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  transform-origin: center;
-}
-
-/* Animated hamburger to X */
-.menu-toggle.active .bar:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
-}
-.menu-toggle.active .bar:nth-child(2) {
-  opacity: 0;
-}
-.menu-toggle.active .bar:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
 }
 
 .theme-toggle {
   cursor: pointer;
-  font-size: 20px;
+  font-size: 18px;
   transition: transform 0.3s;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  background: none;
+  border: none;
+  color: white;
+  padding: 4px;
+  margin: 0;
+  width: auto;
+  line-height: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-[data-theme="dark"] .theme-toggle {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .theme-toggle:hover {
   transform: rotate(20deg);
-  background: rgba(255, 255, 255, 0.2);
+  background: none;
 }
 
 /* Submenu styling */
 .submenu-container {
   position: relative;
   height: auto;
-  margin: 0;
-  padding: 0;
-  border-bottom: 1px solid var(--submenu-border);
-}
-
-.submenu-container > a,
-.submenu-container > span {
-  display: block;
-  padding: 10px 20px;
-  cursor: pointer;
+  margin: 4px 0;
+  padding: 5px;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .submenu {
   display: none;
   flex-direction: column;
-  background-color: var(--submenu-bg);
+  background-color: #0d1117;
   position: relative;
-  left: 0;
-  margin-top: 0;
-  border-left: 3px solid var(--accent-color);
+  left: 10px;
+  margin-top: 5px;
+  border-left: 2px solid var(--accent-color);
+  border-radius: 4px;
+}
+
+[data-theme="light"] .submenu {
+  background-color: #555;
 }
 
 .submenu a {
-  padding: 8px 20px 8px 28px;
+  padding-left: 20px;
   border: none;
-  font-size: 0.95em;
-}
-
-.submenu a:hover {
-  color: var(--accent-color);
-  background-color: var(--nav-hover-bg);
 }
 
 .submenu-container.open .submenu {
   display: flex;
 }
 
+/* Card links in nav context */
 .card-link {
   text-decoration: none;
   color: inherit;
@@ -204,7 +159,6 @@ nav a.active {
   width: 64px;
   height: 64px;
 }
-
 
 /* Mobile */
 @media (max-width: 768px) {
@@ -222,15 +176,12 @@ nav a.active {
     right: 20px;
     width: fit-content;
     border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-    max-height: 80vh;
-    overflow-y: auto;
-    transition: opacity 0.2s ease;
+    border: 1px solid var(--border-color);
   }
 
   nav a {
-    padding: 10px 20px;
-    margin: 0;
+    padding: 5px;
+    margin: 5px 0;
   }
 
   .menu-toggle {
@@ -244,18 +195,6 @@ nav a.active {
   .theme-toggle {
     margin-top: 10px;
   }
-}
-
-/* Dark Mode Table Fixes */
-body[data-theme="dark"] table,
-body[data-theme="dark"] td,
-body[data-theme="dark"] th {
-  background-color: var(--card-bg);
-  color: var(--text-color);
-}
-
-body[data-theme="dark"] tr:nth-child(even) {
-  background-color: #24252a;
 }
 
 html {
